@@ -134,40 +134,40 @@ const Header = (props) => {
               </div>
               <span
                 className="logout_Pointer_cursor mt-2"
-                onClick={() => navigate("/dashboard")}
+                onClick={() => navigate("/orgAdmins")}
               >
-                Dashboard
+                Org.Admins
               </span>
 
               <span
                 className="logout_Pointer_cursor mt-2"
-                onClick={() => navigate("/all-product")}
+                onClick={() => navigate("/profile")}
               >
-                Product
+                Profile
               </span>
 
               <span
                 className="logout_Pointer_cursor mt-2"
-                onClick={() => navigate("/all-order")}
+                onClick={() => navigate("/createSubAdmin")}
               >
-                Order
+                Sub Admin
               </span>
 
               <span
                 className="logout_Pointer_cursor mt-2"
-                onClick={() => navigate("/categories")}
+                //onClick={() => navigate("/categories")}
               >
-                Categories
+                Roles & Permission
               </span>
 
               <span
                 className="logout_Pointer_cursor mt-2"
-                onClick={() => navigate("/daily-request")}
+                //onClick={() => navigate("/daily-request")}
               >
-                Daily Request
+                Add New Role
               </span>
 
-              <span
+              {/* <span
                 className="logout_Pointer_cursor mt-2"
                 onClick={() => navigate("/delivery-partner")}
               >
@@ -186,7 +186,7 @@ const Header = (props) => {
                 onClick={() => navigate("/")}
               >
                 Log Out
-              </span>
+              </span> */}
             </div>
           </div>
         </Toolbar>

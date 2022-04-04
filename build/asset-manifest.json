@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/imran/static/css/main.00442d01.chunk.css",
+    "main.js": "/imran/static/js/main.ed05e77c.chunk.js",
+    "main.js.map": "/imran/static/js/main.ed05e77c.chunk.js.map",
+    "runtime-main.js": "/imran/static/js/runtime-main.52a613f4.js",
+    "runtime-main.js.map": "/imran/static/js/runtime-main.52a613f4.js.map",
+    "static/css/2.7d31e46d.chunk.css": "/imran/static/css/2.7d31e46d.chunk.css",
+    "static/js/2.6f761f2e.chunk.js": "/imran/static/js/2.6f761f2e.chunk.js",
+    "static/js/2.6f761f2e.chunk.js.map": "/imran/static/js/2.6f761f2e.chunk.js.map",
+    "index.html": "/imran/index.html",
+    "static/css/2.7d31e46d.chunk.css.map": "/imran/static/css/2.7d31e46d.chunk.css.map",
+    "static/css/main.00442d01.chunk.css.map": "/imran/static/css/main.00442d01.chunk.css.map",
+    "static/js/2.6f761f2e.chunk.js.LICENSE.txt": "/imran/static/js/2.6f761f2e.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.52a613f4.js",
+    "static/css/2.7d31e46d.chunk.css",
+    "static/js/2.6f761f2e.chunk.js",
+    "static/css/main.00442d01.chunk.css",
+    "static/js/main.ed05e77c.chunk.js"
+  ]
+}

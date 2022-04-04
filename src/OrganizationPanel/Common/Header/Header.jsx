@@ -136,44 +136,44 @@ const Header = (props) => {
               </div>
               <span
                 className="logout_Pointer_cursor mt-2"
-                onClick={() => navigate("/dashboard")}
+                onClick={() => navigate("/orgAdmin/profile")}
               >
-                Dashboard
+                Profile
               </span>
 
               <span
                 className="logout_Pointer_cursor mt-2"
-                onClick={() => navigate("/all-product")}
+                onClick={() => navigate("/orgAdmin/advertisements")}
               >
-                Product
+                Advertisement
               </span>
 
               <span
                 className="logout_Pointer_cursor mt-2"
-                onClick={() => navigate("/all-order")}
+                onClick={() => navigate("/orgAdmin/addImagesScript")}
               >
-                Order
+                Add Images (Script)
               </span>
 
               <span
                 className="logout_Pointer_cursor mt-2"
-                onClick={() => navigate("/categories")}
+                onClick={() => navigate("/orgAdmin/addImagesSystem")}
               >
-                Categories
+                Add Images (System)
               </span>
 
               <span
                 className="logout_Pointer_cursor mt-2"
-                onClick={() => navigate("/daily-request")}
+                onClick={() => navigate("/orgAdmin/supportAgents")}
               >
-                Daily Request
+                Support Agent
               </span>
 
               <span
                 className="logout_Pointer_cursor mt-2"
-                onClick={() => navigate("/delivery-partner")}
+                onClick={() => navigate("/orgAdmin/videoAgents")}
               >
-                Delivery Partner
+                Video Agent
               </span>
 
               <span
@@ -185,9 +185,27 @@ const Header = (props) => {
 
               <span
                 className="logout_Pointer_cursor mt-2"
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/orgAdmin/customers")}
               >
-                Log Out
+                Customer
+              </span>
+              <span
+                className="logout_Pointer_cursor mt-2"
+                onClick={() => navigate("/orgAdmin/supportTickets")}
+              >
+                Support Ticket
+              </span>
+              <span
+                className="logout_Pointer_cursor mt-2"
+                onClick={() => navigate("/orgAdmin/packages")}
+              >
+                Packages
+              </span>
+              <span
+                className="logout_Pointer_cursor mt-2"
+                onClick={() => navigate("/orgAdmin/notify")}
+              >
+                Notifications
               </span>
             </div>
           </div>

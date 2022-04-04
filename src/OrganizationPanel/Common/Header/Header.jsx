@@ -182,7 +182,6 @@ const Header = (props) => {
               >
                 Change Password
               </span>
-
               <span
                 className="logout_Pointer_cursor mt-2"
                 onClick={() => navigate("/orgAdmin/customers")}

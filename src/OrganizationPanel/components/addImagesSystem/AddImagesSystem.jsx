@@ -19,180 +19,113 @@ import ViewForm from "./ViewForm";
 //   Select,
 //   TextField,
 // } from "@mui/material";
+const Container = styled.div`
+  width: 100%;
+  padding: 20px;
+`;
+const MainContainer = styled.div`
+  margin: 80px 0;
+  width: 100%;
 
-function AddImagesSystem(props) {
-  const Container = styled.div`
-    width: 100%;
-    padding: 20px;
-  `;
-  const MainContainer = styled.div`
-    margin: 80px 0;
-    width: 100%;
+  h5 {
+    margin: 20px 0;
+  }
+`;
+const Header = styled.div`
+  display: flex;
+  width: 100%;
+  height: 70px;
+  align-items: center;
+  border: 1px solid lightblue;
+  margin-bottom: 20px;
+  border-radius: 4px;
 
-    h5 {
-      margin: 20px 0;
-    }
-  `;
-  const Header = styled.div`
-    display: flex;
-    width: 100%;
-    height: 70px;
-    align-items: center;
-    border: 1px solid lightblue;
-    margin-bottom: 20px;
-    border-radius: 4px;
-
-    span {
-      padding: 0 20px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: #17a2b8;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-    }
-  `;
-  const Inputs = styled.div`
-    width: 50%;
-  `;
-  const CheckBoxs = styled.div`
-    width: 50%;
+  span {
+    padding: 0 20px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #17a2b8;
     display: flex;
     align-items: center;
-  `;
+    cursor: pointer;
+  }
+`;
+const Inputs = styled.div`
+  width: 50%;
+`;
+const CheckBoxs = styled.div`
+  width: 50%;
+  display: flex;
+  align-items: center;
+`;
 
+function AddImagesSystem() {
   const navigate = useNavigate();
+  const [image, setImage] = useState();
+  const [expandOpen, setExpandOpen] = useState(false);
+  const token = localStorage.getItem("token");
+  const [images, setImages] = useState([]);
 
-  //   useEffect(() => {
-  //     window.scrollTo(0, 0);
+  useEffect(() => {
+    const fetchImages = async () => {
+      // setLoading(true);
 
-  //     let url = "https://urban-home.herokuapp.com/api/alluser";
+      const auth = {
+        headers: { Authorization: `Bearer ${token}` },
+      };
+      try {
+        const { data: response } = await axios.get(
+          "https://video-agent-flyweis.herokuapp.com/packages/all",
+          auth
+        );
 
-  //     axios
-  //       .get(url)
-  //       .then(
-  //         (res) => {
-  //           // console.log("data userData:::", res);
+        setImages(response.data);
 
-  //           setUserData(res.data.getalluser);
-  //         },
+        // console.log("packages", packages);
+      } catch (error) {
+        console.error(error.message);
+      }
+    };
+    fetchImages();
+  }, []);
 
-  //         (error) => {
-  //           setisloading(false);
-  //           console.log("data response error:::", error);
-  //         }
-  //       )
-  //       .catch((e) => {
-  //         setisloading(false);
-  //         console.log("data response error:::", e);
-  //       });
-  //   }, [isupdated]);
+  const addImage = () => {
+    try {
+      let url = "https://video-agent-flyweis.herokuapp.com/image-upload";
+      //setisloading(true);
 
-  //   console.log("user data", userData);
+      const fd = new FormData();
 
-  //   const addUser = () => {
-  //     try {
-  //       let url = "https://urban-home.herokuapp.com/api/userdetail";
-  //       console.log("url::", url);
-  //       //   setisloading(true);
+      fd.append("image", image);
 
-  //       let temp = {
-  //         name,
-  //         email,
-  //         number,
-  //         address,
-  //       };
-  //       console.log("temp", temp);
+      const config = {
+        headers: { Authorization: `Bearer ${token}` },
+      };
 
-  //       axios
-  //         .post(url, temp)
-  //         .then(
-  //           (res) => {
-  //             console.log("data user", res);
-  //             // setisloading(false);
-  //             // props.history.push("/home");
-  //             // showNotificationMsz(res.data.message, "success");
-  //           },
+      axios
+        .post(url, fd, config)
+        .then(
+          (res) => {
+            console.log("data Category:::", res);
+            alert("Image Added Successfully");
+            ///setisloading(false);
+            //showNotificationMsz(res.data.msg, "success");
+          },
 
-  //           (error) => {
-  //             // setisloading(false);
-  //             console.log("data response error:::", error);
-  //             // showNotificationMsz(error, "danger");
-  //           }
-  //         )
-  //         .catch((e) => {
-  //           //   setisloading(false);
-  //           console.log("data response error:::", e);
-  //           //   showNotificationMsz(e, "danger");
-  //         });
-  //     } catch (error) {}
-  //   };
-
-  //   const updateUser = (EditId) => {
-  //     console.log("editid", EditId);
-  //     let id = EditId;
-
-  //     try {
-  //       let url = `https://urban-home.herokuapp.com/api/updateuser/${id}`;
-  //       // setisloading(true);
-
-  //       let temp = {
-  //         name: editName,
-  //         number: editNumber,
-  //         email: editEmail,
-  //         address: editAddress,
-  //       };
-
-  //       axios
-  //         .put(url, temp)
-  //         .then(
-  //           (res) => {
-  //             console.log("response :::", res);
-  //             handleDialog();
-  //             // setisloading(false);
-  //             setIsUpdated(!isUpdated);
-
-  //             //  showNotificationMsz(res.data.msg, "success");
-  //             // props.history.push("/customer-purchace-order")
-  //           },
-
-  //           (error) => {
-  //             // setisloading(false);
-  //             console.log("data response error:::", error);
-  //             //   showNotificationMsz(error, "success");
-  //           }
-  //         )
-  //         .catch((e) => {
-  //           // setisloading(false);
-  //           console.log("data response error:::", e);
-  //           // showNotificationMsz(e, "success");
-  //         });
-  //     } catch (error) {}
-  //   };
-
-  //   const deleteUser = (row) => {
-  //     let id = row._id;
-
-  //     try {
-  //       // setisloading(true);
-  //       let url = `https://urban-home.herokuapp.com/api/deleteuser/${id}`;
-  //       axios.delete(url).then(
-  //         (res) => {
-  //           // setisloading(false);
-  //           setIsUpdated(!isUpdated);
-  //           // showNotificationMsz(res.data.msg, "success");
-  //           console.log("resdeletedata", res);
-  //         },
-  //         (error) => {
-  //           // showNotificationMsz(error, "danger");
-  //           // setisloading(false);
-  //         }
-  //       );
-  //     } catch (error) {
-  //       // showNotificationMsz(error, "danger");
-  //       // setisloading(false);
-  //     }
-  //   };
+          (error) => {
+            //setisloading(false);
+            console.log("data response error:::", error);
+            alert("Unable to Add Image");
+            //showNotificationMsz(error, "danger");
+          }
+        )
+        .catch((e) => {
+          //setisloading(false);
+          console.log("data response error:::", e);
+          //showNotificationMsz(e, "danger");
+        });
+    } catch (error) {}
+  };
 
   return (
     <Container>
@@ -202,12 +135,10 @@ function AddImagesSystem(props) {
             Organization Admin
             <span onClick={() => navigate("/")}>/Add Images</span>
           </span>
-          {/* <button onClick={() => setExpandOpen(!expandOpen)}>
-            Add Details
-          </button> */}
+          <button onClick={() => setExpandOpen(!expandOpen)}>Add Image</button>
         </Header>
 
-        {/* <Expand open={expandOpen}>
+        <Expand open={expandOpen}>
           <Card className=" mb-2 Card_shadow p-3">
             <div className="card_admissiondetails_height">
               <div className="textfiled_margin">
@@ -223,65 +154,15 @@ function AddImagesSystem(props) {
 
                   <Grid className="Component_main_grid">
                     <Grid item md={6}>
-                      <div className="text_filed_heading">Name</div>
+                      <div className="text_filed_heading">Upload Image</div>
                       <div className="mr-2 mt-1">
                         <input
-                          type="text"
+                          accept="image/*"
+                          type="file"
                           className="form-control "
                           placeholder="Enter Name"
-                          autoComplete="off"
-                          value={name}
                           onChange={(e) => {
-                            setName(e.target.value);
-                          }}
-                        />
-                      </div>
-                    </Grid>
-
-                    <Grid item md={6}>
-                      <div className="text_filed_heading">Email</div>
-                      <div className="mr-2 mt-1">
-                        <input
-                          type="text"
-                          className="form-control "
-                          placeholder="Enter Email"
-                          autoComplete="off"
-                          value={email}
-                          onChange={(e) => {
-                            setEmail(e.target.value);
-                          }}
-                        />
-                      </div>
-                    </Grid>
-                  </Grid>
-
-                  <Grid className="Component_main_grid">
-                    <Grid item md={6}>
-                      <div className=" mr-2  mt-1">
-                        <input
-                          type="number"
-                          className="form-control "
-                          placeholder="Enter Name"
-                          autoComplete="off"
-                          value={number}
-                          onChange={(e) => {
-                            setNumber(e.target.value);
-                          }}
-                        />
-                      </div>
-                    </Grid>
-
-                    <Grid item md={6}>
-                      <div className="text_filed_heading">Address</div>
-                      <div className=" mr-2  mt-1">
-                        <input
-                          type="text"
-                          className="form-control "
-                          placeholder="Enter Address"
-                          autoComplete="off"
-                          value={address}
-                          onChange={(e) => {
-                            setAddress(e.target.value);
+                            setImage(e.target.files[0]);
                           }}
                         />
                       </div>
@@ -292,7 +173,7 @@ function AddImagesSystem(props) {
                   <Button
                     variant="contained"
                     className="button_formatting"
-                    // onClick={addUser}
+                    onClick={addImage}
                   >
                     Create
                   </Button>
@@ -300,7 +181,7 @@ function AddImagesSystem(props) {
               </div>
             </div>
           </Card>
-        </Expand> */}
+        </Expand>
         <ViewForm />
       </MainContainer>
     </Container>

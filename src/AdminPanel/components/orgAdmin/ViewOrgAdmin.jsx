@@ -8,8 +8,6 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
-import HOC from "../../Common/HOC";
 import { Card, Grid, Button } from "@material-ui/core";
 //pagination
 import TablePagination from "@material-ui/core/TablePagination";
@@ -29,130 +27,7 @@ const useStyles = makeStyles({
   },
 });
 
-function ViewOrgAdmin({
-  userData,
-  editDailogOpen,
-  setEditDailogOpen,
-  editName,
-  setEditName,
-  editAddress,
-  setEditAddress,
-  editEmail,
-  setEditEmail,
-  editNumber,
-  setEditNumber,
-  EditId,
-  handleDialog,
-  updateUser,
-  editUser,
-  deleteUser,
-}) {
-  // const [isupdated, setisupdated] = useState(false);
-  // const [isloading, setisloading] = useState(false);
-  // const [userData, setUserData] = useState([]);
-
-  //edit
-  // const [EditDailogOpen, setEditDailogOpen] = useState("");
-  // const [EditcategoryName, setEditcategoryName] = useState(false);
-  // const [EditId, setEditId] = useState("");
-  // const token = localStorage.getItem("token");
-
-  // useEffect(() => {
-  //   window.scrollTo(0, 0);
-
-  //   let url = "https://urban-home.herokuapp.com/api/alluser";
-
-  //   axios
-  //     .get(url)
-  //     .then(
-  //       (res) => {
-  //         // console.log("data userData:::", res);
-
-  //         setUserData(res.data.getalluser);
-  //       },
-
-  //       (error) => {
-  //         setisloading(false);
-  //         console.log("data response error:::", error);
-  //       }
-  //     )
-  //     .catch((e) => {
-  //       setisloading(false);
-  //       console.log("data response error:::", e);
-  //     });
-  // }, [isupdated]);
-
-  // console.log("user data", userData);
-
-  ///delete Category Name
-  // const deleteCategory = (row) => {
-  //   let id = row._id;
-  //   setisloading(false);
-  //   let url = getBaseUrl() + `deleteCategory/${id}`;
-  //   axios
-  //     .delete(url)
-  //     .then(
-  //       (res) => {
-  //         console.log("data response:::", res);
-  //         setisupdated(!isupdated);
-  //         showNotificationMsz(res.data.msg, "success");
-  //         setisloading(false);
-  //       },
-
-  //       (error) => {
-  //         console.log("data response error:::", error);
-  //         showNotificationMsz(error, "danger");
-  //         setisloading(false);
-  //       }
-  //     )
-  //     .catch((e) => {
-  //       console.log("data response error:::", e);
-  //       showNotificationMsz(e, "danger");
-  //       setisloading(false);
-  //     });
-  // };
-
-  ///update Category Name
-  // const UpdateBrand = (ID) => {
-  //   let id = ID;
-  //   setisloading(true);
-  //   let url = getBaseUrl() + `updateCategory/${id}`;
-  //   let temp = {
-  //     categoryName: EditcategoryName,
-  //   };
-
-  //   axios
-  //     .patch(url, temp)
-  //     .then(
-  //       (res) => {
-  //         console.log("data response:::", res);
-  //         setisupdated(!isupdated);
-  //         showNotificationMsz(res.data.msg, "success");
-  //         setEditDailogOpen(!EditDailogOpen);
-  //         setisloading(false);
-  //       },
-
-  //       (error) => {
-  //         console.log("data response error:::", error);
-  //         showNotificationMsz(error, "danger");
-  //         setisloading(false);
-  //       }
-  //     )
-  //     .catch((e) => {
-  //       console.log("data response error:::", e);
-  //       showNotificationMsz(e, "danger");
-  //       setisloading(false);
-  //     });
-  // };
-
-  //paginaton
-
-  // const UpdateCategoryData = (row) => {
-  //   setEditDailogOpen(!EditDailogOpen);
-  //   setEditcategoryName(row.categoryName);
-  //   setEditId(row._id);
-  // };
-
+function ViewOrgAdmin({ orgData }) {
   // for pagination hadler
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [page, setPage] = React.useState(0);
@@ -168,7 +43,7 @@ function ViewOrgAdmin({
   };
 
   const [titlename, settitlename] = useState("");
-  const filterData = userData?.filter((event) => {
+  const filterData = orgData?.filter((event) => {
     return event.name?.toLowerCase().indexOf(titlename?.toLowerCase()) !== -1;
   });
 
@@ -221,12 +96,13 @@ function ViewOrgAdmin({
               <Table className={classes.table} aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Image</TableCell>
+                    <TableCell>Role</TableCell>
                     <TableCell>Name</TableCell>
                     <TableCell>Email</TableCell>
                     <TableCell>Number</TableCell>
-                    <TableCell>Address</TableCell>
-                    <TableCell>Operations</TableCell>
+                    <TableCell>Country Code</TableCell>
+                    <TableCell>Organization</TableCell>
+                    <TableCell>Actions</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -237,33 +113,29 @@ function ViewOrgAdmin({
                       )
                     : filterData
                   )?.map((row) => (
-                    <TableRow key={row.name}>
-                      <TableCell component="th" scope="row">
-                        {/* <img
-                          src={getBaseUrl() + row.CourseImg}
-                          style={{ height: "30px", width: "50px" }}
-                        /> */}
-                      </TableCell>
+                    <TableRow key={row.id}>
+                      <TableCell>{row.role}</TableCell>
                       <TableCell>{row.name}</TableCell>
                       <TableCell>{row.email}</TableCell>
-                      <TableCell>{row.number}</TableCell>
-                      <TableCell>{row.address}</TableCell>
+                      <TableCell>{row.phoneNumber}</TableCell>
+                      <TableCell>{row.countryCode}</TableCell>
+                      <TableCell>{row.organization.name}</TableCell>
 
                       <TableCell>
                         <button
                           type="button"
                           class="btn btn-info mr-4"
-                          onClick={() => editUser(row)}
+                          //onClick={() => editUser(row)}
                         >
                           <i
                             class="fa fa-edit"
-                            onClick={() => setEditDailogOpen(!editDailogOpen)}
+                            //onClick={() => setEditDailogOpen(!editDailogOpen)}
                           ></i>
                         </button>
                         <button
                           type="button"
                           class="btn btn-info"
-                          onClick={() => deleteUser(row)}
+                          //onClick={() => deleteUser(row)}
                         >
                           <i class="fa fa-trash"></i>
                         </button>
@@ -287,8 +159,8 @@ function ViewOrgAdmin({
 
           <br />
           <Dialog
-            open={editDailogOpen}
-            onClose={() => setEditDailogOpen(!editDailogOpen)}
+            //open={editDailogOpen}
+            //onClose={() => setEditDailogOpen(!editDailogOpen)}
             aria-labelledby="form-dialog-title"
             maxWidth="sm"
             fullWidth="fullWidth"
@@ -305,10 +177,10 @@ function ViewOrgAdmin({
                   className="form-control "
                   placeholder="Enter Name"
                   autoComplete="off"
-                  value={editName}
-                  onChange={(e) => {
-                    setEditName(e.target.value);
-                  }}
+                  // value={editName}
+                  // onChange={(e) => {
+                  //   setEditName(e.target.value);
+                  // }}
                 />
               </div>
 
@@ -319,10 +191,10 @@ function ViewOrgAdmin({
                   className="form-control "
                   placeholder="Enter Number"
                   autoComplete="off"
-                  value={editNumber}
-                  onChange={(e) => {
-                    setEditNumber(e.target.value);
-                  }}
+                  // value={editNumber}
+                  // onChange={(e) => {
+                  //   setEditNumber(e.target.value);
+                  // }}
                 />
               </div>
 
@@ -333,10 +205,10 @@ function ViewOrgAdmin({
                   className="form-control "
                   placeholder="Enter Email"
                   autoComplete="off"
-                  value={editEmail}
-                  onChange={(e) => {
-                    setEditEmail(e.target.value);
-                  }}
+                  // value={editEmail}
+                  // onChange={(e) => {
+                  //   setEditEmail(e.target.value);
+                  // }}
                 />
               </div>
 
@@ -347,26 +219,26 @@ function ViewOrgAdmin({
                   className="form-control "
                   placeholder="Enter Address"
                   autoComplete="off"
-                  value={editAddress}
-                  onChange={(e) => {
-                    setEditAddress(e.target.value);
-                  }}
+                  // value={editAddress}
+                  // onChange={(e) => {
+                  //   setEditAddress(e.target.value);
+                  // }}
                 />
               </div>
             </DialogContent>
             <DialogActions>
               <Button
                 className="button_formatting"
-                onClick={() => setEditDailogOpen(!editDailogOpen)}
+                //onClick={() => setEditDailogOpen(!editDailogOpen)}
               >
                 Cancel
               </Button>
               <Button
                 className="button_formatting"
-                onClick={() => {
-                  updateUser(EditId);
-                  handleDialog();
-                }}
+                // onClick={() => {
+                //   updateUser(EditId);
+                //   handleDialog();
+                // }}
               >
                 Upload
               </Button>

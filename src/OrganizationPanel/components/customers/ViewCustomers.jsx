@@ -13,8 +13,8 @@ import HOC from "../../Common/HOC";
 import { Card, Grid, Button } from "@material-ui/core";
 //pagination
 import TablePagination from "@material-ui/core/TablePagination";
-
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 //DIALOG BOX
 import {
@@ -30,116 +30,17 @@ const useStyles = makeStyles({
   },
 });
 
-function ViewCustomers() {
-  // const [isupdated, setisupdated] = useState(false);
-  // const [isloading, setisloading] = useState(false);
-  // const [userData, setUserData] = useState([]);
-
-  //edit
-  // const [EditDailogOpen, setEditDailogOpen] = useState("");
-  // const [EditcategoryName, setEditcategoryName] = useState(false);
-  // const [EditId, setEditId] = useState("");
-  // const token = localStorage.getItem("token");
-
-  // useEffect(() => {
-  //   window.scrollTo(0, 0);
-
-  //   let url = "https://urban-home.herokuapp.com/api/alluser";
-
-  //   axios
-  //     .get(url)
-  //     .then(
-  //       (res) => {
-  //         // console.log("data userData:::", res);
-
-  //         setUserData(res.data.getalluser);
-  //       },
-
-  //       (error) => {
-  //         setisloading(false);
-  //         console.log("data response error:::", error);
-  //       }
-  //     )
-  //     .catch((e) => {
-  //       setisloading(false);
-  //       console.log("data response error:::", e);
-  //     });
-  // }, [isupdated]);
-
-  // console.log("user data", userData);
-
-  ///delete Category Name
-  // const deleteCategory = (row) => {
-  //   let id = row._id;
-  //   setisloading(false);
-  //   let url = getBaseUrl() + `deleteCategory/${id}`;
-  //   axios
-  //     .delete(url)
-  //     .then(
-  //       (res) => {
-  //         console.log("data response:::", res);
-  //         setisupdated(!isupdated);
-  //         showNotificationMsz(res.data.msg, "success");
-  //         setisloading(false);
-  //       },
-
-  //       (error) => {
-  //         console.log("data response error:::", error);
-  //         showNotificationMsz(error, "danger");
-  //         setisloading(false);
-  //       }
-  //     )
-  //     .catch((e) => {
-  //       console.log("data response error:::", e);
-  //       showNotificationMsz(e, "danger");
-  //       setisloading(false);
-  //     });
-  // };
-
-  ///update Category Name
-  // const UpdateBrand = (ID) => {
-  //   let id = ID;
-  //   setisloading(true);
-  //   let url = getBaseUrl() + `updateCategory/${id}`;
-  //   let temp = {
-  //     categoryName: EditcategoryName,
-  //   };
-
-  //   axios
-  //     .patch(url, temp)
-  //     .then(
-  //       (res) => {
-  //         console.log("data response:::", res);
-  //         setisupdated(!isupdated);
-  //         showNotificationMsz(res.data.msg, "success");
-  //         setEditDailogOpen(!EditDailogOpen);
-  //         setisloading(false);
-  //       },
-
-  //       (error) => {
-  //         console.log("data response error:::", error);
-  //         showNotificationMsz(error, "danger");
-  //         setisloading(false);
-  //       }
-  //     )
-  //     .catch((e) => {
-  //       console.log("data response error:::", e);
-  //       showNotificationMsz(e, "danger");
-  //       setisloading(false);
-  //     });
-  // };
-
-  //paginaton
-
-  // const UpdateCategoryData = (row) => {
-  //   setEditDailogOpen(!EditDailogOpen);
-  //   setEditcategoryName(row.categoryName);
-  //   setEditId(row._id);
-  // };
-
+function ViewCustomers({ userData }) {
   // for pagination hadler
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [page, setPage] = React.useState(0);
+  const token = localStorage.getItem("token");
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [id, setId] = useState("");
+
+  const [notifications, setNotifications] = useState([]);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const handleChangePage = (event, newPage) => {
     window.scrollTo(0, 0);
@@ -151,12 +52,19 @@ function ViewCustomers() {
     setPage(0);
   };
 
-  // const [titlename, settitlename] = useState("");
-  // const filterData = userData?.filter((event) => {
-  //   return event.name?.toLowerCase().indexOf(titlename?.toLowerCase()) !== -1;
-  // });
+  const [titlename, settitlename] = useState("");
+  const filterData = userData?.filter((event) => {
+    return event.name?.toLowerCase().indexOf(titlename?.toLowerCase()) !== -1;
+  });
 
   const classes = useStyles();
+
+  const handleClick = (notifications) => {
+    setBody(notifications.body);
+    setTitle(notifications.title);
+    setId(notifications._id);
+    console.log(notifications._id);
+  };
 
   return (
     <>
@@ -205,47 +113,47 @@ function ViewCustomers() {
               <Table className={classes.table} aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Image</TableCell>
-                    <TableCell>Name</TableCell>
                     <TableCell>Email</TableCell>
-                    <TableCell>Number</TableCell>
-                    <TableCell>Address</TableCell>
-                    <TableCell>Operations</TableCell>
+                    <TableCell>PhoneNumber</TableCell>
+                    <TableCell>Actions</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  <TableRow>
-                    <TableCell component="th" scope="row">
-                      {/* <img
-                          src={getBaseUrl() + row.CourseImg}
-                          style={{ height: "30px", width: "50px" }}
-                        /> */}
-                    </TableCell>
-                    <TableCell>row.name</TableCell>
-                    <TableCell>row.email</TableCell>
-                    <TableCell>row.number</TableCell>
-                    <TableCell>row.address</TableCell>
-
-                    <TableCell>
-                      <button
-                        type="button"
-                        class="btn btn-info mr-4"
-                        // onClick={() => editUser(row)}
-                      >
-                        <i
-                          class="fa fa-edit"
-                          // onClick={() => setEditDailogOpen(!editDailogOpen)}
-                        ></i>
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-info"
-                        // onClick={() => deleteUser(row)}
-                      >
-                        <i class="fa fa-trash"></i>
-                      </button>
-                    </TableCell>
-                  </TableRow>
+                  {(rowsPerPage > 0
+                    ? filterData?.slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      )
+                    : filterData
+                  )?.map((row) => (
+                    <TableRow>
+                      <TableCell>{row.email}</TableCell>
+                      <TableCell>{row.phoneNumber}</TableCell>
+                      {/* <TableCell>{row.id}</TableCell> */}
+                      <TableCell>
+                        <Link
+                          to={{
+                            pathname: `/orgAdmin/notification/${row.id}`,
+                            state: notifications,
+                          }}
+                          type="button"
+                          class="btn btn-info mr-4"
+                          // onClick={() => {
+                          //   fetchNotifications(row.id);
+                          // }}
+                        >
+                          View Notification
+                        </Link>
+                        {/* <button
+                          type="button"
+                          class="btn btn-info"
+                          // onClick={() => deleteUser(row)}
+                        >
+                          <i class="fa fa-trash"></i>
+                        </button> */}
+                      </TableCell>
+                    </TableRow>
+                  ))}
                 </TableBody>
               </Table>
               <TablePagination
@@ -262,70 +170,41 @@ function ViewCustomers() {
           </Card>
 
           <br />
-          {/* <Dialog
-            open={editDailogOpen}
-            onClose={() => setEditDailogOpen(!editDailogOpen)}
+          <Dialog
+            open={dialogOpen}
             aria-labelledby="form-dialog-title"
             maxWidth="sm"
             fullWidth="fullWidth"
           >
             <DialogTitle>
-              Add Category
+              User Notification
               <span className="float-right icon_color"></span>
             </DialogTitle>
             <DialogContent>
-              <div className="text_filed_heading">Edit Name</div>
+              <div className="text_filed_heading">Title</div>
               <div className="mr-2 mt-1">
                 <input
                   type="text"
                   className="form-control "
                   placeholder="Enter Name"
                   autoComplete="off"
-                  value={editName}
+                  value={title}
                   onChange={(e) => {
-                    setEditName(e.target.value);
+                    setTitle(e.target.value);
                   }}
                 />
               </div>
 
-              <div className="text_filed_heading">Edit Number </div>
+              <div className="text_filed_heading">Body </div>
               <div className="mr-2 mt-1">
                 <input
                   type="text"
                   className="form-control "
                   placeholder="Enter Number"
                   autoComplete="off"
-                  value={editNumber}
+                  value={body}
                   onChange={(e) => {
-                    setEditNumber(e.target.value);
-                  }}
-                />
-              </div>
-
-              <div className="text_filed_heading">Edit Email</div>
-              <div className="mr-2 mt-1">
-                <input
-                  type="text"
-                  className="form-control "
-                  placeholder="Enter Email"
-                  autoComplete="off"
-                  value={editEmail}
-                  onChange={(e) => {
-                    setEditEmail(e.target.value);
-                  }}
-                />
-              </div>
-
-              <div className="text_filed_heading">Edit Address</div>
-              <div className="mr-2 mt-1">
-                <input
-                  type="text"
-                  className="form-control "
-                  placeholder="Enter Address"
-                  autoComplete="off"
-                  value={editAddress}
-                  onChange={(e) => {
-                    setEditAddress(e.target.value);
+                    setBody(e.target.value);
                   }}
                 />
               </div>
@@ -333,21 +212,22 @@ function ViewCustomers() {
             <DialogActions>
               <Button
                 className="button_formatting"
-                onClick={() => setEditDailogOpen(!editDailogOpen)}
+                //onClick={() => setEditDailogOpen(!editDailogOpen)}
               >
                 Cancel
               </Button>
-              <Button
+
+              {/* <Button
                 className="button_formatting"
                 onClick={() => {
-                  updateUser(EditId);
-                  handleDialog();
+                  fetchNotifications(id);
+                  setDialogOpen({ dialogOpen: true });
                 }}
               >
                 Upload
-              </Button>
+              </Button> */}
             </DialogActions>
-          </Dialog> */}
+          </Dialog>
         </div>
       </div>
       {/* <Loder loading={isloading} /> */}

@@ -8,12 +8,11 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
-import HOC from "../../Common/HOC";
 import { Card, Grid, Button } from "@material-ui/core";
+import axios from "axios";
+
 //pagination
 import TablePagination from "@material-ui/core/TablePagination";
-import axios from "axios";
 
 //DIALOG BOX
 import {
@@ -29,130 +28,73 @@ const useStyles = makeStyles({
   },
 });
 
-function ViewPackages({
-  userData,
-  editDailogOpen,
-  setEditDailogOpen,
-  editName,
-  setEditName,
-  editAddress,
-  setEditAddress,
-  editEmail,
-  setEditEmail,
-  editNumber,
-  setEditNumber,
-  EditId,
-  handleDialog,
-  updateUser,
-  editUser,
-  deleteUser,
-}) {
-  // const [isupdated, setisupdated] = useState(false);
-  // const [isloading, setisloading] = useState(false);
-  // const [userData, setUserData] = useState([]);
+function ViewPackages({ packages, expandOpen, setExpandOpen, history }) {
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [points, setPoints] = useState(null);
+  const [price, setPrice] = useState(null);
+  const [status, setStatus] = useState("");
+  const [id, setPackageId] = useState("");
+  const token = localStorage.getItem("token");
 
-  //edit
-  // const [EditDailogOpen, setEditDailogOpen] = useState("");
-  // const [EditcategoryName, setEditcategoryName] = useState(false);
-  // const [EditId, setEditId] = useState("");
-  // const token = localStorage.getItem("token");
-
-  // useEffect(() => {
-  //   window.scrollTo(0, 0);
-
-  //   let url = "https://urban-home.herokuapp.com/api/alluser";
-
-  //   axios
-  //     .get(url)
-  //     .then(
-  //       (res) => {
-  //         // console.log("data userData:::", res);
-
-  //         setUserData(res.data.getalluser);
-  //       },
-
-  //       (error) => {
-  //         setisloading(false);
-  //         console.log("data response error:::", error);
-  //       }
-  //     )
-  //     .catch((e) => {
-  //       setisloading(false);
-  //       console.log("data response error:::", e);
-  //     });
-  // }, [isupdated]);
-
-  // console.log("user data", userData);
-
-  ///delete Category Name
-  // const deleteCategory = (row) => {
-  //   let id = row._id;
-  //   setisloading(false);
-  //   let url = getBaseUrl() + `deleteCategory/${id}`;
-  //   axios
-  //     .delete(url)
-  //     .then(
-  //       (res) => {
-  //         console.log("data response:::", res);
-  //         setisupdated(!isupdated);
-  //         showNotificationMsz(res.data.msg, "success");
-  //         setisloading(false);
-  //       },
-
-  //       (error) => {
-  //         console.log("data response error:::", error);
-  //         showNotificationMsz(error, "danger");
-  //         setisloading(false);
-  //       }
-  //     )
-  //     .catch((e) => {
-  //       console.log("data response error:::", e);
-  //       showNotificationMsz(e, "danger");
-  //       setisloading(false);
-  //     });
+  // const showDialog = () => {
+  //   setDialogOpen({ dialogOpen: true });
   // };
 
-  ///update Category Name
-  // const UpdateBrand = (ID) => {
-  //   let id = ID;
-  //   setisloading(true);
-  //   let url = getBaseUrl() + `updateCategory/${id}`;
-  //   let temp = {
-  //     categoryName: EditcategoryName,
-  //   };
+  const handleClick = (packages) => {
+    setDialogOpen({ dialogOpen: true });
 
-  //   axios
-  //     .patch(url, temp)
-  //     .then(
-  //       (res) => {
-  //         console.log("data response:::", res);
-  //         setisupdated(!isupdated);
-  //         showNotificationMsz(res.data.msg, "success");
-  //         setEditDailogOpen(!EditDailogOpen);
-  //         setisloading(false);
-  //       },
+    setPoints(packages.points);
+    setPrice(packages.price);
+    setStatus(packages.status);
+    setPackageId(packages.id);
+  };
 
-  //       (error) => {
-  //         console.log("data response error:::", error);
-  //         showNotificationMsz(error, "danger");
-  //         setisloading(false);
-  //       }
-  //     )
-  //     .catch((e) => {
-  //       console.log("data response error:::", e);
-  //       showNotificationMsz(e, "danger");
-  //       setisloading(false);
-  //     });
-  // };
+  const hideDialog = () => {
+    setDialogOpen(dialogOpen);
+  };
 
-  //paginaton
+  const editPackage = () => {
+    try {
+      let url = `https://video-agent-flyweis.herokuapp.com/packages/${id}`;
 
-  // const UpdateCategoryData = (row) => {
-  //   setEditDailogOpen(!EditDailogOpen);
-  //   setEditcategoryName(row.categoryName);
-  //   setEditId(row._id);
-  // };
+      let temp = {
+        price: price,
+        points: points,
+        status: status,
+      };
 
+      const config = {
+        headers: { Authorization: `Bearer ${token}` },
+      };
+
+      axios
+        .put(url, temp, config)
+        .then(
+          (res) => {
+            console.log("data Category:::", res);
+            alert("Package Updated Successfully");
+          },
+
+          (error) => {
+            console.log("data response error:::", error);
+            alert(" Unable To Update Package ");
+          }
+        )
+        .catch((e) => {
+          console.log("data response error:::", e);
+        });
+    } catch (error) {}
+  };
+
+  const deletePackage = (id) => {
+    let url = `https://video-agent-flyweis.herokuapp.com/packages/${id}`;
+
+    const config = {
+      headers: { Authorization: `Bearer ${token}` },
+    };
+    axios.delete(url, config).then((res) => console.log("deleted data", res));
+    alert("Successfully Deleted").catch((err) => console.log(err));
+  };
   // for pagination hadler
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [page, setPage] = React.useState(0);
@@ -168,7 +110,7 @@ function ViewPackages({
   };
 
   const [titlename, settitlename] = useState("");
-  const filterData = userData?.filter((event) => {
+  const filterData = packages?.filter((event) => {
     return event.name?.toLowerCase().indexOf(titlename?.toLowerCase()) !== -1;
   });
 
@@ -181,17 +123,17 @@ function ViewPackages({
           <Grid className="Component_main_grid mb-3">
             <Grid item md={9}>
               <h3 className="mb-2">Packages</h3>
-              {/* <button
-                type="button"
-                class="btn btn-info mr-4"
-                onClick={() => props.history.push("/create-course")}
-              >
-                <i class="fa fa-plus"></i> Create
-              </button>
               <button
                 type="button"
                 class="btn btn-info mr-4"
-                onClick={() => props.history.goBack()}
+                onClick={() => setExpandOpen(!expandOpen)}
+              >
+                <i class="fa fa-plus"></i> Create
+              </button>
+              {/* <button
+                type="button"
+                class="btn btn-info mr-4"
+                onClick={() => history.goBack()}
               >
                 <i class="fa fa-arrow-left"></i>Go Back
               </button> */}
@@ -221,12 +163,12 @@ function ViewPackages({
               <Table className={classes.table} aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Image</TableCell>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Email</TableCell>
-                    <TableCell>Number</TableCell>
-                    <TableCell>Address</TableCell>
-                    <TableCell>Operations</TableCell>
+                    <TableCell>Points</TableCell>
+                    <TableCell>Price</TableCell>
+                    <TableCell>Status</TableCell>
+                    <TableCell>Actions</TableCell>
+                    {/* <TableCell>Address</TableCell>
+                    <TableCell>Operations</TableCell> */}
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -238,32 +180,23 @@ function ViewPackages({
                     : filterData
                   )?.map((row) => (
                     <TableRow key={row.name}>
-                      <TableCell component="th" scope="row">
-                        {/* <img
-                          src={getBaseUrl() + row.CourseImg}
-                          style={{ height: "30px", width: "50px" }}
-                        /> */}
-                      </TableCell>
-                      <TableCell>{row.name}</TableCell>
-                      <TableCell>{row.email}</TableCell>
-                      <TableCell>{row.number}</TableCell>
-                      <TableCell>{row.address}</TableCell>
+                      {/* <TableCell component="th" scope="row"></TableCell> */}
+                      <TableCell>{row.points}</TableCell>
+                      <TableCell>{row.price}</TableCell>
+                      <TableCell>{row.status}</TableCell>
 
                       <TableCell>
                         <button
                           type="button"
                           class="btn btn-info mr-4"
-                          onClick={() => editUser(row)}
+                          onClick={() => handleClick(row)}
                         >
-                          <i
-                            class="fa fa-edit"
-                            onClick={() => setEditDailogOpen(!editDailogOpen)}
-                          ></i>
+                          <i class="fa fa-edit"></i>
                         </button>
                         <button
                           type="button"
                           class="btn btn-info"
-                          onClick={() => deleteUser(row)}
+                          onClick={() => deletePackage(row.id)}
                         >
                           <i class="fa fa-trash"></i>
                         </button>
@@ -287,8 +220,8 @@ function ViewPackages({
 
           <br />
           <Dialog
-            open={editDailogOpen}
-            onClose={() => setEditDailogOpen(!editDailogOpen)}
+            open={dialogOpen}
+            onClose={hideDialog}
             aria-labelledby="form-dialog-title"
             maxWidth="sm"
             fullWidth="fullWidth"
@@ -298,58 +231,43 @@ function ViewPackages({
               <span className="float-right icon_color"></span>
             </DialogTitle>
             <DialogContent>
-              <div className="text_filed_heading">Edit Name</div>
+              <div className="text_filed_heading">Edit Point</div>
               <div className="mr-2 mt-1">
                 <input
                   type="text"
                   className="form-control "
-                  placeholder="Enter Name"
                   autoComplete="off"
-                  value={editName}
+                  value={points}
                   onChange={(e) => {
-                    setEditName(e.target.value);
+                    setPoints(e.target.value);
                   }}
                 />
               </div>
 
-              <div className="text_filed_heading">Edit Number </div>
+              <div className="text_filed_heading">Edit Price </div>
               <div className="mr-2 mt-1">
                 <input
                   type="text"
                   className="form-control "
                   placeholder="Enter Number"
                   autoComplete="off"
-                  value={editNumber}
+                  value={price}
                   onChange={(e) => {
-                    setEditNumber(e.target.value);
+                    setPrice(e.target.value);
                   }}
                 />
               </div>
 
-              <div className="text_filed_heading">Edit Email</div>
+              <div className="text_filed_heading">Edit Status</div>
               <div className="mr-2 mt-1">
                 <input
                   type="text"
                   className="form-control "
                   placeholder="Enter Email"
                   autoComplete="off"
-                  value={editEmail}
+                  value={status}
                   onChange={(e) => {
-                    setEditEmail(e.target.value);
-                  }}
-                />
-              </div>
-
-              <div className="text_filed_heading">Edit Address</div>
-              <div className="mr-2 mt-1">
-                <input
-                  type="text"
-                  className="form-control "
-                  placeholder="Enter Address"
-                  autoComplete="off"
-                  value={editAddress}
-                  onChange={(e) => {
-                    setEditAddress(e.target.value);
+                    setStatus(e.target.value);
                   }}
                 />
               </div>
@@ -357,15 +275,15 @@ function ViewPackages({
             <DialogActions>
               <Button
                 className="button_formatting"
-                onClick={() => setEditDailogOpen(!editDailogOpen)}
+                onClick={() => setDialogOpen(false)}
               >
                 Cancel
               </Button>
               <Button
                 className="button_formatting"
                 onClick={() => {
-                  updateUser(EditId);
-                  handleDialog();
+                  editPackage(id);
+                  setDialogOpen(false);
                 }}
               >
                 Upload

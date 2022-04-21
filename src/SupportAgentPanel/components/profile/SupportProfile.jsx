@@ -19,47 +19,47 @@ import { Card, Grid, Button } from "@material-ui/core";
 //   TextField,
 // } from "@mui/material";
 
-function VideoProfile(props) {
-  const Container = styled.div`
-    width: 100%;
-    padding: 20px;
-  `;
-  const MainContainer = styled.div`
-    margin: 80px 0;
-    width: 100%;
+const Container = styled.div`
+  width: 100%;
+  padding: 20px;
+`;
+const MainContainer = styled.div`
+  margin: 80px 0;
+  width: 100%;
 
-    h5 {
-      margin: 20px 0;
-    }
-  `;
-  const Header = styled.div`
-    display: flex;
-    width: 100%;
-    height: 70px;
-    align-items: center;
-    border: 1px solid lightblue;
-    margin-bottom: 20px;
-    border-radius: 4px;
+  h5 {
+    margin: 20px 0;
+  }
+`;
+const Header = styled.div`
+  display: flex;
+  width: 100%;
+  height: 70px;
+  align-items: center;
+  border: 1px solid lightblue;
+  margin-bottom: 20px;
+  border-radius: 4px;
 
-    span {
-      padding: 0 20px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: #17a2b8;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-    }
-  `;
-  const Inputs = styled.div`
-    width: 50%;
-  `;
-  const CheckBoxs = styled.div`
-    width: 50%;
+  span {
+    padding: 0 20px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #17a2b8;
     display: flex;
     align-items: center;
-  `;
+    cursor: pointer;
+  }
+`;
+const Inputs = styled.div`
+  width: 50%;
+`;
+const CheckBoxs = styled.div`
+  width: 50%;
+  display: flex;
+  align-items: center;
+`;
 
+function SupportProfile(props) {
   const navigate = useNavigate();
   const [isupdated, setisupdated] = useState(false);
   const [isloading, setisloading] = useState(false);
@@ -230,7 +230,7 @@ function VideoProfile(props) {
       <MainContainer>
         <Header>
           <span>
-            Video Agent
+            Support Agent
             <span onClick={() => navigate("/dashbord")}>/Profile</span>
           </span>
           {/* <button onClick={() => setExpandOpen(!expandOpen)}>
@@ -355,4 +355,4 @@ function VideoProfile(props) {
   );
 }
 
-export default HOC(VideoProfile);
+export default HOC(SupportProfile);

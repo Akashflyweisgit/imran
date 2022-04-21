@@ -45,7 +45,11 @@ const Header = (props) => {
                 }}
               ></i>
             </span>
-            <span className="pl-3 mt-1" style={{ color: "#b0dd36" }}>
+            <span
+              className="pl-3 mt-1"
+              style={{ color: "#b0dd36" }}
+              onClick={() => navigate("/")}
+            >
               <h4>Organization Panel</h4>
             </span>
           </div>

@@ -11,6 +11,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import HOC from "../../Common/HOC";
 import { Card, Grid, Button } from "@material-ui/core";
+import { Link } from "react-router-dom";
 //pagination
 import TablePagination from "@material-ui/core/TablePagination";
 
@@ -30,113 +31,7 @@ const useStyles = makeStyles({
   },
 });
 
-function ViewTickets() {
-  // const [isupdated, setisupdated] = useState(false);
-  // const [isloading, setisloading] = useState(false);
-  // const [userData, setUserData] = useState([]);
-
-  //edit
-  // const [EditDailogOpen, setEditDailogOpen] = useState("");
-  // const [EditcategoryName, setEditcategoryName] = useState(false);
-  // const [EditId, setEditId] = useState("");
-  // const token = localStorage.getItem("token");
-
-  // useEffect(() => {
-  //   window.scrollTo(0, 0);
-
-  //   let url = "https://urban-home.herokuapp.com/api/alluser";
-
-  //   axios
-  //     .get(url)
-  //     .then(
-  //       (res) => {
-  //         // console.log("data userData:::", res);
-
-  //         setUserData(res.data.getalluser);
-  //       },
-
-  //       (error) => {
-  //         setisloading(false);
-  //         console.log("data response error:::", error);
-  //       }
-  //     )
-  //     .catch((e) => {
-  //       setisloading(false);
-  //       console.log("data response error:::", e);
-  //     });
-  // }, [isupdated]);
-
-  // console.log("user data", userData);
-
-  ///delete Category Name
-  // const deleteCategory = (row) => {
-  //   let id = row._id;
-  //   setisloading(false);
-  //   let url = getBaseUrl() + `deleteCategory/${id}`;
-  //   axios
-  //     .delete(url)
-  //     .then(
-  //       (res) => {
-  //         console.log("data response:::", res);
-  //         setisupdated(!isupdated);
-  //         showNotificationMsz(res.data.msg, "success");
-  //         setisloading(false);
-  //       },
-
-  //       (error) => {
-  //         console.log("data response error:::", error);
-  //         showNotificationMsz(error, "danger");
-  //         setisloading(false);
-  //       }
-  //     )
-  //     .catch((e) => {
-  //       console.log("data response error:::", e);
-  //       showNotificationMsz(e, "danger");
-  //       setisloading(false);
-  //     });
-  // };
-
-  ///update Category Name
-  // const UpdateBrand = (ID) => {
-  //   let id = ID;
-  //   setisloading(true);
-  //   let url = getBaseUrl() + `updateCategory/${id}`;
-  //   let temp = {
-  //     categoryName: EditcategoryName,
-  //   };
-
-  //   axios
-  //     .patch(url, temp)
-  //     .then(
-  //       (res) => {
-  //         console.log("data response:::", res);
-  //         setisupdated(!isupdated);
-  //         showNotificationMsz(res.data.msg, "success");
-  //         setEditDailogOpen(!EditDailogOpen);
-  //         setisloading(false);
-  //       },
-
-  //       (error) => {
-  //         console.log("data response error:::", error);
-  //         showNotificationMsz(error, "danger");
-  //         setisloading(false);
-  //       }
-  //     )
-  //     .catch((e) => {
-  //       console.log("data response error:::", e);
-  //       showNotificationMsz(e, "danger");
-  //       setisloading(false);
-  //     });
-  // };
-
-  //paginaton
-
-  // const UpdateCategoryData = (row) => {
-  //   setEditDailogOpen(!EditDailogOpen);
-  //   setEditcategoryName(row.categoryName);
-  //   setEditId(row._id);
-  // };
-
+function ViewTickets({ tickets }) {
   // for pagination hadler
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [page, setPage] = React.useState(0);
@@ -151,10 +46,10 @@ function ViewTickets() {
     setPage(0);
   };
 
-  // const [titlename, settitlename] = useState("");
-  // const filterData = userData?.filter((event) => {
-  //   return event.name?.toLowerCase().indexOf(titlename?.toLowerCase()) !== -1;
-  // });
+  const [titlename, settitlename] = useState("");
+  const filterData = tickets?.filter((event) => {
+    return event.name?.toLowerCase().indexOf(titlename?.toLowerCase()) !== -1;
+  });
 
   const classes = useStyles();
 
@@ -205,47 +100,50 @@ function ViewTickets() {
               <Table className={classes.table} aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Image</TableCell>
                     <TableCell>Name</TableCell>
-                    <TableCell>Email</TableCell>
-                    <TableCell>Number</TableCell>
-                    <TableCell>Address</TableCell>
+                    <TableCell>Title</TableCell>
+                    <TableCell>Description</TableCell>
+                    <TableCell>Status</TableCell>
                     <TableCell>Operations</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  <TableRow>
-                    <TableCell component="th" scope="row">
-                      {/* <img
-                          src={getBaseUrl() + row.CourseImg}
-                          style={{ height: "30px", width: "50px" }}
-                        /> */}
-                    </TableCell>
-                    <TableCell>row.name</TableCell>
-                    <TableCell>row.email</TableCell>
-                    <TableCell>row.number</TableCell>
-                    <TableCell>row.address</TableCell>
+                  {(rowsPerPage > 0
+                    ? filterData?.slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      )
+                    : filterData
+                  )?.map((row) => (
+                    <TableRow>
+                      <TableCell>{row.user.name}</TableCell>
+                      <TableCell>{row.title}</TableCell>
+                      <TableCell>{row.description}</TableCell>
+                      <TableCell>{row.status}</TableCell>
 
-                    <TableCell>
-                      <button
-                        type="button"
-                        class="btn btn-info mr-4"
-                        // onClick={() => editUser(row)}
-                      >
-                        <i
-                          class="fa fa-edit"
-                          // onClick={() => setEditDailogOpen(!editDailogOpen)}
-                        ></i>
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-info"
-                        // onClick={() => deleteUser(row)}
-                      >
-                        <i class="fa fa-trash"></i>
-                      </button>
-                    </TableCell>
-                  </TableRow>
+                      <TableCell>
+                        <Link
+                          to={`/orgAdmin/supportTickets/view/${row._id}`}
+                          type="button"
+                          class="btn btn-info mr-4"
+                          // onClick={() => editUser(row)}
+                        >
+                          {/* <i
+                            class="fa fa-edit"
+                            // onClick={() => setEditDailogOpen(!editDailogOpen)}
+                          ></i> */}
+                          View Ticket
+                        </Link>
+                        <button
+                          type="button"
+                          class="btn btn-info"
+                          // onClick={() => deleteUser(row)}
+                        >
+                          <i class="fa fa-trash"></i>
+                        </button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
                 </TableBody>
               </Table>
               <TablePagination

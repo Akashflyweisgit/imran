@@ -21,47 +21,13 @@ import {
 //icons to show & hide th password
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { useNavigate } from "react-router-dom";
+import { blankValidator, showNotificationMsz } from "../../../utils/Validation";
 
 const Login = (props) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const adminLogin = () => {
-    try {
-      let url = "https://urban-home.herokuapp.com/api/adminlogin";
-      console.log("url::", url);
-      //   setisloading(true);
-
-      let temp = {
-        email,
-        password,
-      };
-      console.log("temp", temp);
-
-      axios
-        .post(url, temp)
-        .then(
-          (res) => {
-            console.log("data login", res);
-            // setisloading(false);
-            props.history.push("/home");
-            // showNotificationMsz(res.data.message, "success");
-          },
-
-          (error) => {
-            // setisloading(false);
-            console.log("data response error:::", error);
-            // showNotificationMsz(error, "danger");
-          }
-        )
-        .catch((e) => {
-          //   setisloading(false);
-          console.log("data response error:::", e);
-          //   showNotificationMsz(e, "danger");
-        });
-    } catch (error) {}
-  };
+  const [msg, setMsg] = useState("");
 
   //---------------------local state ----------------------
   const [showPassword, setshowPassword] = useState(false);
@@ -69,6 +35,27 @@ const Login = (props) => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const adminLogIn = async () => {
+    try {
+      let url = "https://video-agent-flyweis.herokuapp.com/super-admin/login";
+      let temp = {
+        email: email,
+        password: password,
+      };
+      await axios.post(url, temp).then((res) => {
+        console.log("signUpData", res);
+        localStorage.setItem("token", res.data.loginToken);
+        navigate("/profile");
+        setMsg(res.data.msg);
+        // showNotificationMsz(res.data.message, "success");
+      });
+    } catch (error) {
+      console.log("Error in login:;;:::::::;;;", error);
+      // showNotificationMsz(error, "danger");
+      setMsg("Invalid Login Credentials");
+    }
+  };
 
   return (
     <>
@@ -130,11 +117,13 @@ const Login = (props) => {
               </FormControl>
             </div>
 
+            <span>{msg} </span>
+
             <div className="inputfiledformatting mt-2">
               <Button
                 variant="contained"
                 className="Login_page_button"
-                onClick={() => navigate("/profile")}
+                onClick={adminLogIn}
               >
                 Log in As Admin
               </Button>
@@ -148,7 +137,7 @@ const Login = (props) => {
                 }}
               >
                 <span
-                  onClick={() => navigate("/orgAdmin/profile")}
+                  onClick={() => navigate("/orgAdmin/login")}
                   style={{
                     padding: "6px",
                     border: "1px solid lightblue",
@@ -161,7 +150,20 @@ const Login = (props) => {
                   Organization Admin
                 </span>
                 <span
-                  onClick={() => navigate("/videoAgent/profile")}
+                  onClick={() => navigate("/supportAgent/login")}
+                  style={{
+                    padding: "6px",
+                    border: "1px solid lightblue",
+                    borderRadius: "4px",
+                    backgroundColor: "#3bcee6",
+                    color: "#fff",
+                  }}
+                >
+                  {" "}
+                  Support Agent Admin
+                </span>
+                <span
+                  onClick={() => navigate("/videoAgent/login")}
                   style={{
                     padding: "6px",
                     border: "1px solid lightblue",

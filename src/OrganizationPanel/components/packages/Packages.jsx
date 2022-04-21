@@ -1,229 +1,124 @@
 /** @format */
 
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import ViewPackages from "./ViewPackages";
 import HOC from "../../Common/HOC";
 import axios from "axios";
 import Expand from "react-expand-animated";
 import { Card, Grid, Button } from "@material-ui/core";
-// import {
-//   Checkbox,
-//   FormControl,
-//   FormControlLabel,
-//   InputLabel,.
 
-//   MenuItem,
-//   Select,
-//   TextField,
-// } from "@mui/material";
+const Container = styled.div`
+  width: 100%;
+  padding: 20px;
+`;
+const MainContainer = styled.div`
+  margin: 80px 0;
+  width: 100%;
+
+  h5 {
+    margin: 20px 0;
+  }
+`;
+const Header = styled.div`
+  display: flex;
+  width: 100%;
+  height: 70px;
+  align-items: center;
+  border: 1px solid lightblue;
+  margin-bottom: 20px;
+  border-radius: 4px;
+
+  span {
+    padding: 0 20px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #17a2b8;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+`;
+const Inputs = styled.div`
+  width: 50%;
+`;
+const CheckBoxs = styled.div`
+  width: 50%;
+  display: flex;
+  align-items: center;
+`;
 
 function Packages(props) {
-  const Container = styled.div`
-    width: 100%;
-    padding: 20px;
-  `;
-  const MainContainer = styled.div`
-    margin: 80px 0;
-    width: 100%;
-
-    h5 {
-      margin: 20px 0;
-    }
-  `;
-  const Header = styled.div`
-    display: flex;
-    width: 100%;
-    height: 70px;
-    align-items: center;
-    border: 1px solid lightblue;
-    margin-bottom: 20px;
-    border-radius: 4px;
-
-    span {
-      padding: 0 20px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: #17a2b8;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-    }
-  `;
-  const Inputs = styled.div`
-    width: 50%;
-  `;
-  const CheckBoxs = styled.div`
-    width: 50%;
-    display: flex;
-    align-items: center;
-  `;
-
   const navigate = useNavigate();
-  const [isupdated, setisupdated] = useState(false);
-  const [isloading, setisloading] = useState(false);
+
   const [expandOpen, setExpandOpen] = useState(false);
-  const [isUpdated, setIsUpdated] = useState(false);
+  const [packages, setPackages] = useState([]);
+  const [points, setPoints] = useState(null);
+  const [price, setPrice] = useState(null);
+  const [status, setStatus] = useState("");
+  const [organization, setOrganization] = useState("");
+  const token = localStorage.getItem("token");
 
-  const [userData, setUserData] = useState([]);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [number, setNumber] = useState("");
-  const [address, setAddress] = useState("");
+  useEffect(() => {
+    const fetchPackages = async () => {
+      // setLoading(true);
 
-  //edit
-  const [editDailogOpen, setEditDailogOpen] = useState(false);
-  const [editName, setEditName] = useState(false);
-  const [EditId, setEditId] = useState("");
-  const [editEmail, setEditEmail] = useState("");
-  const [editNumber, setEditNumber] = useState("");
-  const [editAddress, setEditAddress] = useState("");
+      const auth = {
+        headers: { Authorization: `Bearer ${token}` },
+      };
+      try {
+        const { data: response } = await axios.get(
+          "https://video-agent-flyweis.herokuapp.com/packages/all",
+          auth
+        );
 
-  const handleDialog = () => {
-    setEditDailogOpen(!editDailogOpen);
+        setPackages(response.data.packages);
+
+        // console.log("packages", packages);
+      } catch (error) {
+        console.error(error.message);
+      }
+    };
+    fetchPackages();
+  }, []);
+
+  console.log("packages", packages);
+  localStorage.setItem("packages", JSON.stringify(packages));
+
+  const addPackages = () => {
+    try {
+      let url = "https://video-agent-flyweis.herokuapp.com/packages/";
+
+      let temp = {
+        price: price,
+        points: points,
+        status: status,
+        organization: organization,
+      };
+
+      const config = {
+        headers: { Authorization: `Bearer ${token}` },
+      };
+
+      axios
+        .post(url, temp, config)
+        .then(
+          (res) => {
+            console.log("data Category:::", res);
+            alert("Package Created Successfully");
+          },
+
+          (error) => {
+            console.log("data response error:::", error);
+            alert(" Unable To Create Package ");
+          }
+        )
+        .catch((e) => {
+          console.log("data response error:::", e);
+        });
+    } catch (error) {}
   };
-
-  const editUser = (row) => {
-    console.log("editsubcategory", row);
-    setEditName(row.name);
-    setEditEmail(row.email);
-    setEditNumber(row.address);
-    setEditId(row._id);
-
-    handleDialog();
-  };
-
-  //   useEffect(() => {
-  //     window.scrollTo(0, 0);
-
-  //     let url = "https://urban-home.herokuapp.com/api/alluser";
-
-  //     axios
-  //       .get(url)
-  //       .then(
-  //         (res) => {
-  //           // console.log("data userData:::", res);
-
-  //           setUserData(res.data.getalluser);
-  //         },
-
-  //         (error) => {
-  //           setisloading(false);
-  //           console.log("data response error:::", error);
-  //         }
-  //       )
-  //       .catch((e) => {
-  //         setisloading(false);
-  //         console.log("data response error:::", e);
-  //       });
-  //   }, [isupdated]);
-
-  //   console.log("user data", userData);
-
-  //   const addUser = () => {
-  //     try {
-  //       let url = "https://urban-home.herokuapp.com/api/userdetail";
-  //       console.log("url::", url);
-  //       //   setisloading(true);
-
-  //       let temp = {
-  //         name,
-  //         email,
-  //         number,
-  //         address,
-  //       };
-  //       console.log("temp", temp);
-
-  //       axios
-  //         .post(url, temp)
-  //         .then(
-  //           (res) => {
-  //             console.log("data user", res);
-  //             // setisloading(false);
-  //             // props.history.push("/home");
-  //             // showNotificationMsz(res.data.message, "success");
-  //           },
-
-  //           (error) => {
-  //             // setisloading(false);
-  //             console.log("data response error:::", error);
-  //             // showNotificationMsz(error, "danger");
-  //           }
-  //         )
-  //         .catch((e) => {
-  //           //   setisloading(false);
-  //           console.log("data response error:::", e);
-  //           //   showNotificationMsz(e, "danger");
-  //         });
-  //     } catch (error) {}
-  //   };
-
-  //   const updateUser = (EditId) => {
-  //     console.log("editid", EditId);
-  //     let id = EditId;
-
-  //     try {
-  //       let url = `https://urban-home.herokuapp.com/api/updateuser/${id}`;
-  //       // setisloading(true);
-
-  //       let temp = {
-  //         name: editName,
-  //         number: editNumber,
-  //         email: editEmail,
-  //         address: editAddress,
-  //       };
-
-  //       axios
-  //         .put(url, temp)
-  //         .then(
-  //           (res) => {
-  //             console.log("response :::", res);
-  //             handleDialog();
-  //             // setisloading(false);
-  //             setIsUpdated(!isUpdated);
-
-  //             //  showNotificationMsz(res.data.msg, "success");
-  //             // props.history.push("/customer-purchace-order")
-  //           },
-
-  //           (error) => {
-  //             // setisloading(false);
-  //             console.log("data response error:::", error);
-  //             //   showNotificationMsz(error, "success");
-  //           }
-  //         )
-  //         .catch((e) => {
-  //           // setisloading(false);
-  //           console.log("data response error:::", e);
-  //           // showNotificationMsz(e, "success");
-  //         });
-  //     } catch (error) {}
-  //   };
-
-  //   const deleteUser = (row) => {
-  //     let id = row._id;
-
-  //     try {
-  //       // setisloading(true);
-  //       let url = `https://urban-home.herokuapp.com/api/deleteuser/${id}`;
-  //       axios.delete(url).then(
-  //         (res) => {
-  //           // setisloading(false);
-  //           setIsUpdated(!isUpdated);
-  //           // showNotificationMsz(res.data.msg, "success");
-  //           console.log("resdeletedata", res);
-  //         },
-  //         (error) => {
-  //           // showNotificationMsz(error, "danger");
-  //           // setisloading(false);
-  //         }
-  //       );
-  //     } catch (error) {
-  //       // showNotificationMsz(error, "danger");
-  //       // setisloading(false);
-  //     }
-  //   };
 
   return (
     <Container>
@@ -233,9 +128,9 @@ function Packages(props) {
             Organization Admins
             <span onClick={() => navigate("/dashbord")}>/ Home </span>
           </span>
-          <button onClick={() => setExpandOpen(!expandOpen)}>
+          {/* <button onClick={() => setExpandOpen(!expandOpen)}>
             Add Details
-          </button>
+          </button> */}
         </Header>
 
         <Expand open={expandOpen}>
@@ -254,32 +149,32 @@ function Packages(props) {
 
                   <Grid className="Component_main_grid">
                     <Grid item md={6}>
-                      <div className="text_filed_heading">Name</div>
+                      <div className="text_filed_heading">Points</div>
                       <div className="mr-2 mt-1">
                         <input
-                          type="text"
+                          type="number"
                           className="form-control "
-                          placeholder="Enter Name"
+                          placeholder="Enter Points"
                           autoComplete="off"
-                          value={name}
+                          value={points}
                           onChange={(e) => {
-                            setName(e.target.value);
+                            setPoints(e.target.value);
                           }}
                         />
                       </div>
                     </Grid>
 
                     <Grid item md={6}>
-                      <div className="text_filed_heading">Email</div>
+                      <div className="text_filed_heading">Price</div>
                       <div className="mr-2 mt-1">
                         <input
-                          type="text"
+                          type="number"
                           className="form-control "
-                          placeholder="Enter Email"
+                          placeholder="Enter Price"
                           autoComplete="off"
-                          value={email}
+                          value={price}
                           onChange={(e) => {
-                            setEmail(e.target.value);
+                            setPrice(e.target.value);
                           }}
                         />
                       </div>
@@ -288,31 +183,32 @@ function Packages(props) {
 
                   <Grid className="Component_main_grid">
                     <Grid item md={6}>
+                      <div className="text_filed_heading">Status</div>
                       <div className=" mr-2  mt-1">
                         <input
-                          type="number"
+                          type="text"
                           className="form-control "
-                          placeholder="Enter Name"
+                          placeholder="Enter Status"
                           autoComplete="off"
-                          value={number}
+                          value={status}
                           onChange={(e) => {
-                            setNumber(e.target.value);
+                            setStatus(e.target.value);
                           }}
                         />
                       </div>
                     </Grid>
 
                     <Grid item md={6}>
-                      <div className="text_filed_heading">Address</div>
+                      <div className="text_filed_heading">Organization</div>
                       <div className=" mr-2  mt-1">
                         <input
                           type="text"
                           className="form-control "
-                          placeholder="Enter Address"
+                          placeholder="Enter Organization"
                           autoComplete="off"
-                          value={address}
+                          value={organization}
                           onChange={(e) => {
-                            setAddress(e.target.value);
+                            setOrganization(e.target.value);
                           }}
                         />
                       </div>
@@ -323,7 +219,7 @@ function Packages(props) {
                   <Button
                     variant="contained"
                     className="button_formatting"
-                    // onClick={addUser}
+                    onClick={addPackages}
                   >
                     Create
                   </Button>
@@ -333,22 +229,9 @@ function Packages(props) {
           </Card>
         </Expand>
         <ViewPackages
-          userData={userData}
-          editDailogOpen={editDailogOpen}
-          setEditDailogOpen={setEditDailogOpen}
-          editName={editName}
-          setEditName={setEditName}
-          editAddress={editAddress}
-          setEditAddress={setEditAddress}
-          editEmail={editEmail}
-          setEditEmail={setEditEmail}
-          editNumber={editNumber}
-          setEditNumber={setEditNumber}
-          //   updateUser={updateUser}
-          EditId={EditId}
-          handleDialog={handleDialog}
-          editUser={editUser}
-          //   deleteUser={deleteUser}
+          packages={packages}
+          setExpandOpen={setExpandOpen}
+          expandOpen={expandOpen}
         />
       </MainContainer>
     </Container>

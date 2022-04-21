@@ -164,7 +164,7 @@ function ViewProfile() {
         <div className="content_padding">
           <Grid className="Component_main_grid mb-3">
             <Grid item md={9}>
-              <h3 className="mb-2">Customers</h3>
+              <h3 className="mb-2">Profile</h3>
               {/* <button
                 type="button"
                 class="btn btn-info mr-4"

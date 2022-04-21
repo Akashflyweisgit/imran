@@ -35,112 +35,6 @@ const useStyles = makeStyles({
 });
 
 function ViewForm() {
-  // const [isupdated, setisupdated] = useState(false);
-  // const [isloading, setisloading] = useState(false);
-  // const [userData, setUserData] = useState([]);
-
-  //edit
-  // const [EditDailogOpen, setEditDailogOpen] = useState("");
-  // const [EditcategoryName, setEditcategoryName] = useState(false);
-  // const [EditId, setEditId] = useState("");
-  // const token = localStorage.getItem("token");
-
-  // useEffect(() => {
-  //   window.scrollTo(0, 0);
-
-  //   let url = "https://urban-home.herokuapp.com/api/alluser";
-
-  //   axios
-  //     .get(url)
-  //     .then(
-  //       (res) => {
-  //         // console.log("data userData:::", res);
-
-  //         setUserData(res.data.getalluser);
-  //       },
-
-  //       (error) => {
-  //         setisloading(false);
-  //         console.log("data response error:::", error);
-  //       }
-  //     )
-  //     .catch((e) => {
-  //       setisloading(false);
-  //       console.log("data response error:::", e);
-  //     });
-  // }, [isupdated]);
-
-  // console.log("user data", userData);
-
-  ///delete Category Name
-  // const deleteCategory = (row) => {
-  //   let id = row._id;
-  //   setisloading(false);
-  //   let url = getBaseUrl() + `deleteCategory/${id}`;
-  //   axios
-  //     .delete(url)
-  //     .then(
-  //       (res) => {
-  //         console.log("data response:::", res);
-  //         setisupdated(!isupdated);
-  //         showNotificationMsz(res.data.msg, "success");
-  //         setisloading(false);
-  //       },
-
-  //       (error) => {
-  //         console.log("data response error:::", error);
-  //         showNotificationMsz(error, "danger");
-  //         setisloading(false);
-  //       }
-  //     )
-  //     .catch((e) => {
-  //       console.log("data response error:::", e);
-  //       showNotificationMsz(e, "danger");
-  //       setisloading(false);
-  //     });
-  // };
-
-  ///update Category Name
-  // const UpdateBrand = (ID) => {
-  //   let id = ID;
-  //   setisloading(true);
-  //   let url = getBaseUrl() + `updateCategory/${id}`;
-  //   let temp = {
-  //     categoryName: EditcategoryName,
-  //   };
-
-  //   axios
-  //     .patch(url, temp)
-  //     .then(
-  //       (res) => {
-  //         console.log("data response:::", res);
-  //         setisupdated(!isupdated);
-  //         showNotificationMsz(res.data.msg, "success");
-  //         setEditDailogOpen(!EditDailogOpen);
-  //         setisloading(false);
-  //       },
-
-  //       (error) => {
-  //         console.log("data response error:::", error);
-  //         showNotificationMsz(error, "danger");
-  //         setisloading(false);
-  //       }
-  //     )
-  //     .catch((e) => {
-  //       console.log("data response error:::", e);
-  //       showNotificationMsz(e, "danger");
-  //       setisloading(false);
-  //     });
-  // };
-
-  //paginaton
-
-  // const UpdateCategoryData = (row) => {
-  //   setEditDailogOpen(!EditDailogOpen);
-  //   setEditcategoryName(row.categoryName);
-  //   setEditId(row._id);
-  // };
-
   // for pagination hadler
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [page, setPage] = React.useState(0);
@@ -168,29 +62,29 @@ function ViewForm() {
         <div className="content_padding">
           <Grid className="Component_main_grid mb-3">
             <Grid item md={9}>
-              <h3 className="mb-2">Add Images (System)</h3>
+              <h3 className="mb-2">Packages</h3>
               {/* <button
                 type="button"
                 class="btn btn-info mr-4"
-                onClick={() => props.history.push("/create-course")}
+                //onClick={() => setExpandOpen(!expandOpen)}
               >
                 <i class="fa fa-plus"></i> Create
-              </button>
-              <button
+              </button> */}
+              {/* <button
                 type="button"
                 class="btn btn-info mr-4"
-                onClick={() => props.history.goBack()}
+                onClick={() => history.goBack()}
               >
                 <i class="fa fa-arrow-left"></i>Go Back
               </button> */}
             </Grid>
             <Grid item md={3}>
               <div className="d-flex mt-3">
-                {/* <span className="p-2">
+                <span className="p-2">
                   <i class="fa fa-search"></i>
-                </span> */}
-                {/* <span>
-                  <input
+                </span>
+                <span>
+                  {/* <input
                     value={titlename}
                     onChange={(e) => {
                       settitlename(e.target.value);
@@ -198,92 +92,70 @@ function ViewForm() {
                     type="text"
                     class="form-control"
                     placeholder="Search by Name"
-                  />
-                </span> */}
+                  /> */}
+                </span>
               </div>
             </Grid>
           </Grid>
 
           <Card classname="main_card p-3">
-            <Grid rid className="Component_main_grid">
-              <Grid item md={6}>
-                <div className="text_filed_heading">Name</div>
-                <div className="mr-2 mt-1">
-                  <input
-                    type="text"
-                    className="form-control "
-                    placeholder="Enter Name"
-                    autoComplete="off"
-                    // value={name}
-                    // onChange={(e) => {
-                    //   setname(e.target.value);
-                    // }}
-                  />
-                </div>
-              </Grid>
+            <TableContainer>
+              <Table className={classes.table} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Image</TableCell>
 
-              <Grid item md={6}>
-                <div className="text_filed_heading">Upload</div>
-                <div className="mr-2 mt-1">
-                  <input
-                    type="file"
-                    className="form-control "
-                    placeholder="Enter Course Name"
-                    autoComplete="off"
-                    // value={coursename}
-                    // onChange={(e) => {
-                    //   setcoursename(e.target.value);
-                    // }}
-                  />
-                </div>
-              </Grid>
-            </Grid>
-            <Grid className="Component_main_grid">
-              <Grid item md={6}>
-                <div className="text_filed_heading">Password</div>
-                <div className=" mr-2  mt-1">
-                  <input
-                    type="email"
-                    className="form-control "
-                    autoComplete="off"
-                    // value={password}
-                    // onChange={(e) => {
-                    //   setpassword(e.target.value);
-                    // }}
-                  />
-                </div>
-              </Grid>
+                    {/* <TableCell>Address</TableCell>
+                    <TableCell>Operations</TableCell> */}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {/* {(rowsPerPage > 0
+                    ? filterData?.slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      )
+                    : filterData
+                  )?.map((row) => ( */}
+                  {/* <TableRow key={row.name}> */}
+                  {/* <TableCell component="th" scope="row"></TableCell> */}
+                  {/* <TableCell>{row.points}</TableCell>
+                      <TableCell>{row.price}</TableCell>
+                      <TableCell>{row.status}</TableCell> */}
 
-              <Grid item md={6}>
-                <div className="text_filed_heading">Email</div>
-                <div className=" mr-2  mt-1">
-                  <input
-                    type="text"
-                    className="form-control "
-                    autoComplete="off"
-                    // value={email}
-                    // onChange={(e) => {
-                    //   setemail(e.target.value);
-                    // }}
-                  />
-                </div>
-              </Grid>
-            </Grid>
-            <Grid item md={24}>
-              <div className="text_filed_heading">Address</div>
-              <div className=" mr-2  mt-1">
-                <input
-                  type="textarea"
-                  className="form-control "
-                  autoComplete="off"
-                  // value={email}
-                  // onChange={(e) => {
-                  //   setemail(e.target.value);
-                  // }}
-                />
-              </div>
-            </Grid>
+                  <TableCell>
+                    {/* <button
+                          type="button"
+                          class="btn btn-info mr-4"
+                          onClick={() => handleClick(row)}
+                        >
+                          <i class="fa fa-edit"></i>
+                        </button>
+                        <button
+                          type="button"
+                          class="btn btn-info"
+                          onClick={() => deletePackage(row.id)}
+                        >
+                          <i class="fa fa-trash"></i>
+                        </button> */}
+                  </TableCell>
+                  {/* </TableRow> */}
+                  {/* ))} */}
+                </TableBody>
+              </Table>
+              <TablePagination
+                true
+                rowsPerPageOptions={false}
+                component="div"
+                //count={filterData?.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onChangePage={handleChangePage}
+                onChangeRowsPerPage={handleChangeRowsPerPage}
+              />
+            </TableContainer>
           </Card>
+
           <br />
         </div>
       </div>

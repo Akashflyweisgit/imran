@@ -15,7 +15,7 @@ import { Card, Grid, Button } from "@material-ui/core";
 import TablePagination from "@material-ui/core/TablePagination";
 
 import axios from "axios";
-
+import { Link } from "react-router-dom";
 //DIALOG BOX
 import {
   Dialog,
@@ -23,6 +23,7 @@ import {
   DialogTitle,
   DialogContent,
 } from "@material-ui/core";
+import { Edit } from "@material-ui/icons";
 
 const useStyles = makeStyles({
   table: {
@@ -30,131 +31,90 @@ const useStyles = makeStyles({
   },
 });
 
-function ViewProfile() {
-  // const [isupdated, setisupdated] = useState(false);
-  // const [isloading, setisloading] = useState(false);
-  // const [userData, setUserData] = useState([]);
+function ViewProfile({ videoAgents }) {
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [desc, setDesc] = useState("");
+  const [hobbies, setHobbies] = useState([]);
+  const token = localStorage.getItem("token");
+  const [dialogTwo, setDialogTwo] = useState(false);
+  const [name, setName] = useState("");
+  const [code, setCode] = useState("");
+  const [number, setNumber] = useState(null);
 
-  //edit
-  // const [EditDailogOpen, setEditDailogOpen] = useState("");
-  // const [EditcategoryName, setEditcategoryName] = useState(false);
-  // const [EditId, setEditId] = useState("");
-  // const token = localStorage.getItem("token");
-
-  // useEffect(() => {
-  //   window.scrollTo(0, 0);
-
-  //   let url = "https://urban-home.herokuapp.com/api/alluser";
-
-  //   axios
-  //     .get(url)
-  //     .then(
-  //       (res) => {
-  //         // console.log("data userData:::", res);
-
-  //         setUserData(res.data.getalluser);
-  //       },
-
-  //       (error) => {
-  //         setisloading(false);
-  //         console.log("data response error:::", error);
-  //       }
-  //     )
-  //     .catch((e) => {
-  //       setisloading(false);
-  //       console.log("data response error:::", e);
-  //     });
-  // }, [isupdated]);
-
-  // console.log("user data", userData);
-
-  ///delete Category Name
-  // const deleteCategory = (row) => {
-  //   let id = row._id;
-  //   setisloading(false);
-  //   let url = getBaseUrl() + `deleteCategory/${id}`;
-  //   axios
-  //     .delete(url)
-  //     .then(
-  //       (res) => {
-  //         console.log("data response:::", res);
-  //         setisupdated(!isupdated);
-  //         showNotificationMsz(res.data.msg, "success");
-  //         setisloading(false);
-  //       },
-
-  //       (error) => {
-  //         console.log("data response error:::", error);
-  //         showNotificationMsz(error, "danger");
-  //         setisloading(false);
-  //       }
-  //     )
-  //     .catch((e) => {
-  //       console.log("data response error:::", e);
-  //       showNotificationMsz(e, "danger");
-  //       setisloading(false);
-  //     });
-  // };
-
-  ///update Category Name
-  // const UpdateBrand = (ID) => {
-  //   let id = ID;
-  //   setisloading(true);
-  //   let url = getBaseUrl() + `updateCategory/${id}`;
-  //   let temp = {
-  //     categoryName: EditcategoryName,
-  //   };
-
-  //   axios
-  //     .patch(url, temp)
-  //     .then(
-  //       (res) => {
-  //         console.log("data response:::", res);
-  //         setisupdated(!isupdated);
-  //         showNotificationMsz(res.data.msg, "success");
-  //         setEditDailogOpen(!EditDailogOpen);
-  //         setisloading(false);
-  //       },
-
-  //       (error) => {
-  //         console.log("data response error:::", error);
-  //         showNotificationMsz(error, "danger");
-  //         setisloading(false);
-  //       }
-  //     )
-  //     .catch((e) => {
-  //       console.log("data response error:::", e);
-  //       showNotificationMsz(e, "danger");
-  //       setisloading(false);
-  //     });
-  // };
-
-  //paginaton
-
-  // const UpdateCategoryData = (row) => {
-  //   setEditDailogOpen(!EditDailogOpen);
-  //   setEditcategoryName(row.categoryName);
-  //   setEditId(row._id);
-  // };
-
-  // for pagination hadler
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [page, setPage] = React.useState(0);
-
-  const handleChangePage = (event, newPage) => {
-    window.scrollTo(0, 0);
-    setPage(newPage);
+  const hideDialog = () => {
+    setDialogOpen(dialogOpen);
   };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+  const hideDialogTwo = () => {
+    setDialogTwo(dialogTwo);
   };
 
-  // const [titlename, settitlename] = useState("");
-  // const filterData = userData?.filter((event) => {
-  //   return event.name?.toLowerCase().indexOf(titlename?.toLowerCase()) !== -1;
-  // });
+  const updateProfile = () => {
+    try {
+      let url =
+        "https://video-agent-flyweis.herokuapp.com/video-agents/profile";
+
+      let temp = {
+        description: desc,
+        hobbies: [hobbies],
+      };
+
+      const config = {
+        headers: { Authorization: `Bearer ${token}` },
+      };
+
+      axios
+        .put(url, temp, config)
+        .then(
+          (res) => {
+            console.log("data Category:::", res);
+            alert("Profile Updated");
+          },
+
+          (error) => {
+            console.log("data response error:::", error);
+            alert("Unable");
+          }
+        )
+        .catch((e) => {
+          console.log("data response error:::", e);
+        });
+    } catch (error) {}
+  };
+
+  const updateBankDetails = () => {
+    try {
+      let url =
+        "https://video-agent-flyweis.herokuapp.com/video-agents/bank-details";
+
+      let temp = {
+        name: name,
+        ifscCode: code,
+        accountNumber: number,
+      };
+
+      const config = {
+        headers: { Authorization: `Bearer ${token}` },
+      };
+
+      axios
+        .put(url, temp, config)
+        .then(
+          (res) => {
+            console.log("data Category:::", res);
+            alert("Bank Details Updated");
+          },
+
+          (error) => {
+            console.log("data response error:::", error);
+            alert("Unable");
+          }
+        )
+        .catch((e) => {
+          console.log("data response error:::", e);
+        });
+    } catch (error) {}
+  };
 
   const classes = useStyles();
 
@@ -164,7 +124,7 @@ function ViewProfile() {
         <div className="content_padding">
           <Grid className="Component_main_grid mb-3">
             <Grid item md={9}>
-              <h3 className="mb-2">Customers</h3>
+              <h3 className="mb-2">Profile</h3>
               {/* <button
                 type="button"
                 class="btn btn-info mr-4"
@@ -205,50 +165,77 @@ function ViewProfile() {
               <Table className={classes.table} aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Image</TableCell>
-                    <TableCell>Name</TableCell>
+                    <TableCell>First Name</TableCell>
+                    <TableCell>Last Name</TableCell>
+                    <TableCell>Audio Points</TableCell>
+                    <TableCell>Bank Account Name</TableCell>
+                    <TableCell>Bank Account No.</TableCell>
+                    <TableCell>IFSC</TableCell>
+                    <TableCell>Date Of Birth</TableCell>
+                    <TableCell>Education</TableCell>
                     <TableCell>Email</TableCell>
-                    <TableCell>Number</TableCell>
-                    <TableCell>Address</TableCell>
-                    <TableCell>Operations</TableCell>
+                    <TableCell>Phone Number</TableCell>
+                    <TableCell>Video Points</TableCell>
+                    <TableCell>Actions</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  <TableRow>
-                    <TableCell component="th" scope="row">
-                      {/* <img
-                          src={getBaseUrl() + row.CourseImg}
-                          style={{ height: "30px", width: "50px" }}
-                        /> */}
-                    </TableCell>
-                    <TableCell>row.name</TableCell>
-                    <TableCell>row.email</TableCell>
-                    <TableCell>row.number</TableCell>
-                    <TableCell>row.address</TableCell>
+                  {videoAgents.map((row) => {
+                    return (
+                      <TableRow>
+                        <TableCell>{row.first_name}</TableCell>
+                        <TableCell>{row.last_name}</TableCell>
+                        <TableCell>{row.audio_points}</TableCell>
+                        <TableCell>{row.bank_account.name}</TableCell>
+                        <TableCell>{row.bank_account.account_number}</TableCell>
+                        <TableCell>{row.bank_account.ifsc_code}</TableCell>
+                        <TableCell>{row.date_of_birth}</TableCell>
+                        <TableCell>{row.education}</TableCell>
+                        <TableCell>{row.email}</TableCell>
+                        <TableCell>{row.phone_number}</TableCell>
+                        <TableCell>{row.video_points}</TableCell>
 
-                    <TableCell>
-                      <button
-                        type="button"
-                        class="btn btn-info mr-4"
-                        // onClick={() => editUser(row)}
-                      >
-                        <i
-                          class="fa fa-edit"
-                          // onClick={() => setEditDailogOpen(!editDailogOpen)}
-                        ></i>
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-info"
-                        // onClick={() => deleteUser(row)}
-                      >
-                        <i class="fa fa-trash"></i>
-                      </button>
-                    </TableCell>
-                  </TableRow>
+                        <TableCell>
+                          <Link
+                            type="button"
+                            class="btn btn-info mr-4"
+                            to="/videoAgent/images"
+                          >
+                            {/* <i
+                              class="fa fa-edit"
+                              // onClick={() => setEditDailogOpen(!editDailogOpen)}
+                            ></i> */}
+                            Images
+                          </Link>
+                          <button
+                            type="button"
+                            class="btn btn-info"
+                            onClick={() => setDialogOpen({ dialogOpen: true })}
+                          >
+                            <i class="fa fa-edit"></i>
+                          </button>
+                          <button
+                            type="button"
+                            class="btn btn-info mt-2"
+                            onClick={() => setDialogTwo({ dialogTwo: true })}
+                          >
+                            {/* <i class="fa fa-edit"></i> */}
+                            Update Bank Details
+                          </button>
+                          {/* <button
+                            type="button"
+                            class="btn btn-info"
+                            // onClick={() => deleteUser(row)}
+                          >
+                            <i class="fa fa-trash"></i>
+                          </button> */}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
                 </TableBody>
               </Table>
-              <TablePagination
+              {/* <TablePagination
                 true
                 rowsPerPageOptions={false}
                 component="div"
@@ -257,14 +244,14 @@ function ViewProfile() {
                 page={page}
                 onChangePage={handleChangePage}
                 onChangeRowsPerPage={handleChangeRowsPerPage}
-              />
+              /> */}
             </TableContainer>
           </Card>
 
           <br />
-          {/* <Dialog
-            open={editDailogOpen}
-            onClose={() => setEditDailogOpen(!editDailogOpen)}
+          <Dialog
+            open={dialogOpen}
+            onClose={hideDialog}
             aria-labelledby="form-dialog-title"
             maxWidth="sm"
             fullWidth="fullWidth"
@@ -274,58 +261,109 @@ function ViewProfile() {
               <span className="float-right icon_color"></span>
             </DialogTitle>
             <DialogContent>
-              <div className="text_filed_heading">Edit Name</div>
+              <div className="text_filed_heading">Description</div>
               <div className="mr-2 mt-1">
                 <input
                   type="text"
                   className="form-control "
-                  placeholder="Enter Name"
                   autoComplete="off"
-                  value={editName}
+                  value={desc}
                   onChange={(e) => {
-                    setEditName(e.target.value);
+                    setDesc(e.target.value);
                   }}
                 />
               </div>
 
-              <div className="text_filed_heading">Edit Number </div>
+              <div className="text_filed_heading">Hobbies </div>
               <div className="mr-2 mt-1">
                 <input
                   type="text"
                   className="form-control "
-                  placeholder="Enter Number"
+                  placeholder=""
                   autoComplete="off"
-                  value={editNumber}
+                  value={hobbies}
                   onChange={(e) => {
-                    setEditNumber(e.target.value);
+                    setHobbies(e.target.value);
                   }}
                 />
               </div>
 
-              <div className="text_filed_heading">Edit Email</div>
+              {/* <div className="text_filed_heading">Edit Status</div>
               <div className="mr-2 mt-1">
                 <input
                   type="text"
                   className="form-control "
                   placeholder="Enter Email"
                   autoComplete="off"
-                  value={editEmail}
+                  value={status}
                   onChange={(e) => {
-                    setEditEmail(e.target.value);
+                    setStatus(e.target.value);
                   }}
                 />
-              </div>
+              </div> */}
+            </DialogContent>
+            <DialogActions>
+              <Button
+                className="button_formatting"
+                onClick={() => setDialogOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button className="button_formatting" onClick={updateProfile}>
+                Upload
+              </Button>
+            </DialogActions>
+          </Dialog>
 
-              <div className="text_filed_heading">Edit Address</div>
+          <Dialog
+            open={dialogTwo}
+            onClose={hideDialogTwo}
+            aria-labelledby="form-dialog-title"
+            maxWidth="sm"
+            fullWidth="fullWidth"
+          >
+            <DialogTitle>
+              Add Category
+              <span className="float-right icon_color"></span>
+            </DialogTitle>
+            <DialogContent>
+              <div className="text_filed_heading">Name</div>
               <div className="mr-2 mt-1">
                 <input
                   type="text"
                   className="form-control "
-                  placeholder="Enter Address"
                   autoComplete="off"
-                  value={editAddress}
+                  value={name}
                   onChange={(e) => {
-                    setEditAddress(e.target.value);
+                    setName(e.target.value);
+                  }}
+                />
+              </div>
+
+              <div className="text_filed_heading">Ifsc </div>
+              <div className="mr-2 mt-1">
+                <input
+                  type="text"
+                  className="form-control "
+                  placeholder=""
+                  autoComplete="off"
+                  value={code}
+                  onChange={(e) => {
+                    setCode(e.target.value);
+                  }}
+                />
+              </div>
+
+              <div className="text_filed_heading">Account Number</div>
+              <div className="mr-2 mt-1">
+                <input
+                  type="text"
+                  className="form-control "
+                  placeholder="Enter Email"
+                  autoComplete="off"
+                  value={number}
+                  onChange={(e) => {
+                    setNumber(e.target.value);
                   }}
                 />
               </div>
@@ -333,21 +371,15 @@ function ViewProfile() {
             <DialogActions>
               <Button
                 className="button_formatting"
-                onClick={() => setEditDailogOpen(!editDailogOpen)}
+                onClick={() => setDialogTwo(false)}
               >
                 Cancel
               </Button>
-              <Button
-                className="button_formatting"
-                onClick={() => {
-                  updateUser(EditId);
-                  handleDialog();
-                }}
-              >
+              <Button className="button_formatting" onClick={updateBankDetails}>
                 Upload
               </Button>
             </DialogActions>
-          </Dialog> */}
+          </Dialog>
         </div>
       </div>
       {/* <Loder loading={isloading} /> */}

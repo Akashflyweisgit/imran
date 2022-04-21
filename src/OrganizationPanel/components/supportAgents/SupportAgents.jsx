@@ -8,58 +8,48 @@ import HOC from "../../Common/HOC";
 import axios from "axios";
 import Expand from "react-expand-animated";
 import { Card, Grid, Button } from "@material-ui/core";
-// import {
-//   Checkbox,
-//   FormControl,
-//   FormControlLabel,
-//   InputLabel,.
 
-//   MenuItem,
-//   Select,
-//   TextField,
-// } from "@mui/material";
+const Container = styled.div`
+  width: 100%;
+  padding: 20px;
+`;
+const MainContainer = styled.div`
+  margin: 80px 0;
+  width: 100%;
+
+  h5 {
+    margin: 20px 0;
+  }
+`;
+const Header = styled.div`
+  display: flex;
+  width: 100%;
+  height: 70px;
+  align-items: center;
+  border: 1px solid lightblue;
+  margin-bottom: 20px;
+  border-radius: 4px;
+
+  span {
+    padding: 0 20px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #17a2b8;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+`;
+const Inputs = styled.div`
+  width: 50%;
+`;
+const CheckBoxs = styled.div`
+  width: 50%;
+  display: flex;
+  align-items: center;
+`;
 
 function SupportAgents(props) {
-  const Container = styled.div`
-    width: 100%;
-    padding: 20px;
-  `;
-  const MainContainer = styled.div`
-    margin: 80px 0;
-    width: 100%;
-
-    h5 {
-      margin: 20px 0;
-    }
-  `;
-  const Header = styled.div`
-    display: flex;
-    width: 100%;
-    height: 70px;
-    align-items: center;
-    border: 1px solid lightblue;
-    margin-bottom: 20px;
-    border-radius: 4px;
-
-    span {
-      padding: 0 20px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: #17a2b8;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-    }
-  `;
-  const Inputs = styled.div`
-    width: 50%;
-  `;
-  const CheckBoxs = styled.div`
-    width: 50%;
-    display: flex;
-    align-items: center;
-  `;
-
   const navigate = useNavigate();
   const [isupdated, setisupdated] = useState(false);
   const [isloading, setisloading] = useState(false);
@@ -69,8 +59,10 @@ function SupportAgents(props) {
   const [userData, setUserData] = useState([]);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [number, setNumber] = useState("");
-  const [address, setAddress] = useState("");
+  const [number, setNumber] = useState(null);
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const token = localStorage.getItem("token");
 
   //edit
   const [editDailogOpen, setEditDailogOpen] = useState(false);
@@ -94,136 +86,40 @@ function SupportAgents(props) {
     handleDialog();
   };
 
-  //   useEffect(() => {
-  //     window.scrollTo(0, 0);
+  const addSupportAgent = () => {
+    try {
+      let url = "https://video-agent-flyweis.herokuapp.com/support-agents";
 
-  //     let url = "https://urban-home.herokuapp.com/api/alluser";
+      let temp = {
+        name: name,
+        email: email,
+        phoneNumber: number,
+        password: password,
+        confirmPassword: confirm,
+      };
 
-  //     axios
-  //       .get(url)
-  //       .then(
-  //         (res) => {
-  //           // console.log("data userData:::", res);
+      const config = {
+        headers: { Authorization: `Bearer ${token}` },
+      };
 
-  //           setUserData(res.data.getalluser);
-  //         },
+      axios
+        .post(url, temp, config)
+        .then(
+          (res) => {
+            console.log("data Category:::", res);
+            alert("Support Agent Created Successfully");
+          },
 
-  //         (error) => {
-  //           setisloading(false);
-  //           console.log("data response error:::", error);
-  //         }
-  //       )
-  //       .catch((e) => {
-  //         setisloading(false);
-  //         console.log("data response error:::", e);
-  //       });
-  //   }, [isupdated]);
-
-  //   console.log("user data", userData);
-
-  //   const addUser = () => {
-  //     try {
-  //       let url = "https://urban-home.herokuapp.com/api/userdetail";
-  //       console.log("url::", url);
-  //       //   setisloading(true);
-
-  //       let temp = {
-  //         name,
-  //         email,
-  //         number,
-  //         address,
-  //       };
-  //       console.log("temp", temp);
-
-  //       axios
-  //         .post(url, temp)
-  //         .then(
-  //           (res) => {
-  //             console.log("data user", res);
-  //             // setisloading(false);
-  //             // props.history.push("/home");
-  //             // showNotificationMsz(res.data.message, "success");
-  //           },
-
-  //           (error) => {
-  //             // setisloading(false);
-  //             console.log("data response error:::", error);
-  //             // showNotificationMsz(error, "danger");
-  //           }
-  //         )
-  //         .catch((e) => {
-  //           //   setisloading(false);
-  //           console.log("data response error:::", e);
-  //           //   showNotificationMsz(e, "danger");
-  //         });
-  //     } catch (error) {}
-  //   };
-
-  //   const updateUser = (EditId) => {
-  //     console.log("editid", EditId);
-  //     let id = EditId;
-
-  //     try {
-  //       let url = `https://urban-home.herokuapp.com/api/updateuser/${id}`;
-  //       // setisloading(true);
-
-  //       let temp = {
-  //         name: editName,
-  //         number: editNumber,
-  //         email: editEmail,
-  //         address: editAddress,
-  //       };
-
-  //       axios
-  //         .put(url, temp)
-  //         .then(
-  //           (res) => {
-  //             console.log("response :::", res);
-  //             handleDialog();
-  //             // setisloading(false);
-  //             setIsUpdated(!isUpdated);
-
-  //             //  showNotificationMsz(res.data.msg, "success");
-  //             // props.history.push("/customer-purchace-order")
-  //           },
-
-  //           (error) => {
-  //             // setisloading(false);
-  //             console.log("data response error:::", error);
-  //             //   showNotificationMsz(error, "success");
-  //           }
-  //         )
-  //         .catch((e) => {
-  //           // setisloading(false);
-  //           console.log("data response error:::", e);
-  //           // showNotificationMsz(e, "success");
-  //         });
-  //     } catch (error) {}
-  //   };
-
-  //   const deleteUser = (row) => {
-  //     let id = row._id;
-
-  //     try {
-  //       // setisloading(true);
-  //       let url = `https://urban-home.herokuapp.com/api/deleteuser/${id}`;
-  //       axios.delete(url).then(
-  //         (res) => {
-  //           // setisloading(false);
-  //           setIsUpdated(!isUpdated);
-  //           // showNotificationMsz(res.data.msg, "success");
-  //           console.log("resdeletedata", res);
-  //         },
-  //         (error) => {
-  //           // showNotificationMsz(error, "danger");
-  //           // setisloading(false);
-  //         }
-  //       );
-  //     } catch (error) {
-  //       // showNotificationMsz(error, "danger");
-  //       // setisloading(false);
-  //     }
-  //   };
+          (error) => {
+            console.log("data response error:::", error);
+            alert("Unable to Create Support Agent");
+          }
+        )
+        .catch((e) => {
+          console.log("data response error:::", e);
+        });
+    } catch (error) {}
+  };
 
   return (
     <Container>
@@ -231,7 +127,7 @@ function SupportAgents(props) {
         <Header>
           <span>
             Organization Admins
-            <span onClick={() => navigate("/dashbord")}>/ Home </span>
+            <span onClick={() => navigate("/")}>/ Home </span>
           </span>
           <button onClick={() => setExpandOpen(!expandOpen)}>
             Add Details
@@ -288,11 +184,12 @@ function SupportAgents(props) {
 
                   <Grid className="Component_main_grid">
                     <Grid item md={6}>
+                      <div className="text_filed_heading">Phone Number</div>
                       <div className=" mr-2  mt-1">
                         <input
                           type="number"
                           className="form-control "
-                          placeholder="Enter Name"
+                          placeholder="Enter Number"
                           autoComplete="off"
                           value={number}
                           onChange={(e) => {
@@ -303,27 +200,60 @@ function SupportAgents(props) {
                     </Grid>
 
                     <Grid item md={6}>
-                      <div className="text_filed_heading">Address</div>
+                      <div className="text_filed_heading">Password</div>
                       <div className=" mr-2  mt-1">
                         <input
-                          type="text"
+                          type="password"
                           className="form-control "
-                          placeholder="Enter Address"
+                          placeholder="Enter Password"
                           autoComplete="off"
-                          value={address}
+                          value={password}
                           onChange={(e) => {
-                            setAddress(e.target.value);
+                            setPassword(e.target.value);
                           }}
                         />
                       </div>
                     </Grid>
+                  </Grid>
+                  <Grid className="Component_main_grid">
+                    <Grid item md={6}>
+                      <div className="text_filed_heading">Confirm</div>
+                      <div className=" mr-2  mt-1">
+                        <input
+                          type="password"
+                          className="form-control "
+                          placeholder="Confirm Password"
+                          autoComplete="off"
+                          value={confirm}
+                          onChange={(e) => {
+                            setConfirm(e.target.value);
+                          }}
+                        />
+                      </div>
+                    </Grid>
+
+                    {/* <Grid item md={6}>
+                      <div className="text_filed_heading">Password</div>
+                      <div className=" mr-2  mt-1">
+                        <input
+                          type="password"
+                          className="form-control "
+                          placeholder="Enter Password"
+                          autoComplete="off"
+                          value={password}
+                          onChange={(e) => {
+                            setPassword(e.target.value);
+                          }}
+                        />
+                      </div>
+                    </Grid> */}
                   </Grid>
                 </div>
                 <div className="mt-2 pb-2 ">
                   <Button
                     variant="contained"
                     className="button_formatting"
-                    // onClick={addUser}
+                    onClick={addSupportAgent}
                   >
                     Create
                   </Button>

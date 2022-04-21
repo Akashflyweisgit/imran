@@ -29,24 +29,7 @@ const useStyles = makeStyles({
   },
 });
 
-function ViewNotify({
-  userData,
-  editDailogOpen,
-  setEditDailogOpen,
-  editName,
-  setEditName,
-  editAddress,
-  setEditAddress,
-  editEmail,
-  setEditEmail,
-  editNumber,
-  setEditNumber,
-  EditId,
-  handleDialog,
-  updateUser,
-  editUser,
-  deleteUser,
-}) {
+function ViewNotify({ notifications }) {
   // const [isupdated, setisupdated] = useState(false);
   // const [isloading, setisloading] = useState(false);
   // const [userData, setUserData] = useState([]);
@@ -168,7 +151,7 @@ function ViewNotify({
   };
 
   const [titlename, settitlename] = useState("");
-  const filterData = userData?.filter((event) => {
+  const filterData = notifications?.filter((event) => {
     return event.name?.toLowerCase().indexOf(titlename?.toLowerCase()) !== -1;
   });
 
@@ -221,12 +204,9 @@ function ViewNotify({
               <Table className={classes.table} aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Image</TableCell>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Email</TableCell>
-                    <TableCell>Number</TableCell>
-                    <TableCell>Address</TableCell>
-                    <TableCell>Operations</TableCell>
+                    <TableCell>Title</TableCell>
+                    <TableCell>Body</TableCell>
+                    <TableCell>Actions</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -237,33 +217,24 @@ function ViewNotify({
                       )
                     : filterData
                   )?.map((row) => (
-                    <TableRow key={row.name}>
-                      <TableCell component="th" scope="row">
-                        {/* <img
-                          src={getBaseUrl() + row.CourseImg}
-                          style={{ height: "30px", width: "50px" }}
-                        /> */}
-                      </TableCell>
-                      <TableCell>{row.name}</TableCell>
-                      <TableCell>{row.email}</TableCell>
-                      <TableCell>{row.number}</TableCell>
-                      <TableCell>{row.address}</TableCell>
-
+                    <TableRow>
+                      <TableCell>{row.title}</TableCell>
+                      <TableCell>{row.body}</TableCell>
                       <TableCell>
                         <button
                           type="button"
                           class="btn btn-info mr-4"
-                          onClick={() => editUser(row)}
+                          //onClick={() => editUser(row)}
                         >
                           <i
                             class="fa fa-edit"
-                            onClick={() => setEditDailogOpen(!editDailogOpen)}
+                            //onClick={() => setEditDailogOpen(!editDailogOpen)}
                           ></i>
                         </button>
                         <button
                           type="button"
                           class="btn btn-info"
-                          onClick={() => deleteUser(row)}
+                          //onClick={() => deleteUser(row)}
                         >
                           <i class="fa fa-trash"></i>
                         </button>
@@ -287,8 +258,8 @@ function ViewNotify({
 
           <br />
           <Dialog
-            open={editDailogOpen}
-            onClose={() => setEditDailogOpen(!editDailogOpen)}
+            // open={editDailogOpen}
+            //onClose={() => setEditDailogOpen(!editDailogOpen)}
             aria-labelledby="form-dialog-title"
             maxWidth="sm"
             fullWidth="fullWidth"
@@ -305,10 +276,10 @@ function ViewNotify({
                   className="form-control "
                   placeholder="Enter Name"
                   autoComplete="off"
-                  value={editName}
-                  onChange={(e) => {
-                    setEditName(e.target.value);
-                  }}
+                  // value={editName}
+                  // onChange={(e) => {
+                  //   setEditName(e.target.value);
+                  // }}
                 />
               </div>
 
@@ -319,10 +290,10 @@ function ViewNotify({
                   className="form-control "
                   placeholder="Enter Number"
                   autoComplete="off"
-                  value={editNumber}
-                  onChange={(e) => {
-                    setEditNumber(e.target.value);
-                  }}
+                  // value={editNumber}
+                  // onChange={(e) => {
+                  //   setEditNumber(e.target.value);
+                  // }}
                 />
               </div>
 
@@ -333,10 +304,10 @@ function ViewNotify({
                   className="form-control "
                   placeholder="Enter Email"
                   autoComplete="off"
-                  value={editEmail}
-                  onChange={(e) => {
-                    setEditEmail(e.target.value);
-                  }}
+                  // value={editEmail}
+                  // onChange={(e) => {
+                  //   setEditEmail(e.target.value);
+                  // }}
                 />
               </div>
 
@@ -347,26 +318,26 @@ function ViewNotify({
                   className="form-control "
                   placeholder="Enter Address"
                   autoComplete="off"
-                  value={editAddress}
-                  onChange={(e) => {
-                    setEditAddress(e.target.value);
-                  }}
+                  // value={editAddress}
+                  // onChange={(e) => {
+                  //   setEditAddress(e.target.value);
+                  // }}
                 />
               </div>
             </DialogContent>
             <DialogActions>
               <Button
                 className="button_formatting"
-                onClick={() => setEditDailogOpen(!editDailogOpen)}
+                //onClick={() => setEditDailogOpen(!editDailogOpen)}
               >
                 Cancel
               </Button>
               <Button
                 className="button_formatting"
-                onClick={() => {
-                  updateUser(EditId);
-                  handleDialog();
-                }}
+                // onClick={() => {
+                //   updateUser(EditId);
+                //   handleDialog();
+                // }}
               >
                 Upload
               </Button>

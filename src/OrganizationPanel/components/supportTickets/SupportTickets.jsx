@@ -19,58 +19,59 @@ import { Card, Grid, Button } from "@material-ui/core";
 //   TextField,
 // } from "@mui/material";
 
+const Container = styled.div`
+  width: 100%;
+  padding: 20px;
+`;
+const MainContainer = styled.div`
+  margin: 80px 0;
+  width: 100%;
+
+  h5 {
+    margin: 20px 0;
+  }
+`;
+const Header = styled.div`
+  display: flex;
+  width: 100%;
+  height: 70px;
+  align-items: center;
+  border: 1px solid lightblue;
+  margin-bottom: 20px;
+  border-radius: 4px;
+
+  span {
+    padding: 0 20px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #17a2b8;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+`;
+const Inputs = styled.div`
+  width: 50%;
+`;
+const CheckBoxs = styled.div`
+  width: 50%;
+  display: flex;
+  align-items: center;
+`;
+
 function SupportTickets(props) {
-  const Container = styled.div`
-    width: 100%;
-    padding: 20px;
-  `;
-  const MainContainer = styled.div`
-    margin: 80px 0;
-    width: 100%;
-
-    h5 {
-      margin: 20px 0;
-    }
-  `;
-  const Header = styled.div`
-    display: flex;
-    width: 100%;
-    height: 70px;
-    align-items: center;
-    border: 1px solid lightblue;
-    margin-bottom: 20px;
-    border-radius: 4px;
-
-    span {
-      padding: 0 20px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: #17a2b8;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-    }
-  `;
-  const Inputs = styled.div`
-    width: 50%;
-  `;
-  const CheckBoxs = styled.div`
-    width: 50%;
-    display: flex;
-    align-items: center;
-  `;
-
   const navigate = useNavigate();
   const [isupdated, setisupdated] = useState(false);
   const [isloading, setisloading] = useState(false);
   const [expandOpen, setExpandOpen] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
 
-  const [userData, setUserData] = useState([]);
+  const [tickets, setTickets] = useState([]);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [number, setNumber] = useState("");
   const [address, setAddress] = useState("");
+  const token = localStorage.getItem("token");
 
   //edit
   const [editDailogOpen, setEditDailogOpen] = useState(false);
@@ -94,144 +95,35 @@ function SupportTickets(props) {
     handleDialog();
   };
 
-  //   useEffect(() => {
-  //     window.scrollTo(0, 0);
+  useEffect(() => {
+    const fetchSupportTickets = async () => {
+      // setLoading(true);
 
-  //     let url = "https://urban-home.herokuapp.com/api/alluser";
+      const auth = {
+        headers: { Authorization: `Bearer ${token}` },
+      };
+      try {
+        const { data: response } = await axios.get(
+          "https://video-agent-flyweis.herokuapp.com/support-tickets/all",
+          auth
+        );
+        setTickets(response.data.supportTickets);
+      } catch (error) {
+        console.error(error.message);
+      }
+    };
+    fetchSupportTickets();
+  }, []);
 
-  //     axios
-  //       .get(url)
-  //       .then(
-  //         (res) => {
-  //           // console.log("data userData:::", res);
-
-  //           setUserData(res.data.getalluser);
-  //         },
-
-  //         (error) => {
-  //           setisloading(false);
-  //           console.log("data response error:::", error);
-  //         }
-  //       )
-  //       .catch((e) => {
-  //         setisloading(false);
-  //         console.log("data response error:::", e);
-  //       });
-  //   }, [isupdated]);
-
-  //   console.log("user data", userData);
-
-  //   const addUser = () => {
-  //     try {
-  //       let url = "https://urban-home.herokuapp.com/api/userdetail";
-  //       console.log("url::", url);
-  //       //   setisloading(true);
-
-  //       let temp = {
-  //         name,
-  //         email,
-  //         number,
-  //         address,
-  //       };
-  //       console.log("temp", temp);
-
-  //       axios
-  //         .post(url, temp)
-  //         .then(
-  //           (res) => {
-  //             console.log("data user", res);
-  //             // setisloading(false);
-  //             // props.history.push("/home");
-  //             // showNotificationMsz(res.data.message, "success");
-  //           },
-
-  //           (error) => {
-  //             // setisloading(false);
-  //             console.log("data response error:::", error);
-  //             // showNotificationMsz(error, "danger");
-  //           }
-  //         )
-  //         .catch((e) => {
-  //           //   setisloading(false);
-  //           console.log("data response error:::", e);
-  //           //   showNotificationMsz(e, "danger");
-  //         });
-  //     } catch (error) {}
-  //   };
-
-  //   const updateUser = (EditId) => {
-  //     console.log("editid", EditId);
-  //     let id = EditId;
-
-  //     try {
-  //       let url = `https://urban-home.herokuapp.com/api/updateuser/${id}`;
-  //       // setisloading(true);
-
-  //       let temp = {
-  //         name: editName,
-  //         number: editNumber,
-  //         email: editEmail,
-  //         address: editAddress,
-  //       };
-
-  //       axios
-  //         .put(url, temp)
-  //         .then(
-  //           (res) => {
-  //             console.log("response :::", res);
-  //             handleDialog();
-  //             // setisloading(false);
-  //             setIsUpdated(!isUpdated);
-
-  //             //  showNotificationMsz(res.data.msg, "success");
-  //             // props.history.push("/customer-purchace-order")
-  //           },
-
-  //           (error) => {
-  //             // setisloading(false);
-  //             console.log("data response error:::", error);
-  //             //   showNotificationMsz(error, "success");
-  //           }
-  //         )
-  //         .catch((e) => {
-  //           // setisloading(false);
-  //           console.log("data response error:::", e);
-  //           // showNotificationMsz(e, "success");
-  //         });
-  //     } catch (error) {}
-  //   };
-
-  //   const deleteUser = (row) => {
-  //     let id = row._id;
-
-  //     try {
-  //       // setisloading(true);
-  //       let url = `https://urban-home.herokuapp.com/api/deleteuser/${id}`;
-  //       axios.delete(url).then(
-  //         (res) => {
-  //           // setisloading(false);
-  //           setIsUpdated(!isUpdated);
-  //           // showNotificationMsz(res.data.msg, "success");
-  //           console.log("resdeletedata", res);
-  //         },
-  //         (error) => {
-  //           // showNotificationMsz(error, "danger");
-  //           // setisloading(false);
-  //         }
-  //       );
-  //     } catch (error) {
-  //       // showNotificationMsz(error, "danger");
-  //       // setisloading(false);
-  //     }
-  //   };
+  console.log("tickets", tickets);
 
   return (
     <Container>
       <MainContainer>
         <Header>
           <span>
-            Super Admin
-            <span onClick={() => navigate("/dashbord")}>/View Tickets</span>
+            Organization Admin
+            <span onClick={() => navigate("/dashbord")}>/Support Tickets</span>
           </span>
           {/* <button onClick={() => setExpandOpen(!expandOpen)}>
             Add Details
@@ -332,24 +224,7 @@ function SupportTickets(props) {
             </div>
           </Card>
         </Expand> */}
-        <ViewTickets
-        // userData={userData}
-        // editDailogOpen={editDailogOpen}
-        // setEditDailogOpen={setEditDailogOpen}
-        // editName={editName}
-        // setEditName={setEditName}
-        // editAddress={editAddress}
-        // setEditAddress={setEditAddress}
-        // editEmail={editEmail}
-        // setEditEmail={setEditEmail}
-        // editNumber={editNumber}
-        // setEditNumber={setEditNumber}
-        // //   updateUser={updateUser}
-        // EditId={EditId}
-        // handleDialog={handleDialog}
-        // editUser={editUser}
-        //   deleteUser={deleteUser}
-        />
+        <ViewTickets tickets={tickets} />
       </MainContainer>
     </Container>
   );

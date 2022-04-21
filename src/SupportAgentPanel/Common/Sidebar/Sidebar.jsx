@@ -15,11 +15,11 @@ const Sidebar = (props) => {
       <div className="sidebar_in_mobile_view">
         <ProSidebar collapsed={props.isloading}>
           <Menu iconShape="circle">
-            <MenuItem onClick={() => navigate("/dashbord")}>Dashboard</MenuItem>
+            {/* <MenuItem onClick={() => navigate("/dashbord")}>Dashboard</MenuItem> */}
 
             <MenuItem
               title="Orders"
-              onClick={() => navigate("/videoAgent/profile")}
+              onClick={() => navigate("/supportAgent/profile")}
               icon={<FontAwesomeIcon icon={faFile} />}
             >
               Profile
@@ -27,7 +27,7 @@ const Sidebar = (props) => {
             <MenuItem
               title="Categories"
               icon={<FontAwesomeIcon icon={faFile} />}
-              onClick={() => navigate("/videoAgent/history")}
+              //onClick={() => navigate("/videoAgent/history")}
             >
               {" "}
               History{" "}
@@ -43,7 +43,7 @@ const Sidebar = (props) => {
             <MenuItem
               title="Services"
               icon={<FontAwesomeIcon icon={faFile} />}
-              onClick={() => navigate("/videoAgent/tickets")}
+              onClick={() => navigate("/supportAgent/tickets")}
             >
               {" "}
               Tickets

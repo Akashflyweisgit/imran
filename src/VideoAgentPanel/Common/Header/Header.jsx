@@ -43,7 +43,11 @@ const Header = (props) => {
                 }}
               ></i>
             </span>
-            <span className="pl-3 mt-1" style={{ color: "#b0dd36" }}>
+            <span
+              className="pl-3 mt-1"
+              style={{ color: "#b0dd36" }}
+              onClick={() => navigate("/")}
+            >
               <h4>Video Agent Panel</h4>
             </span>
           </div>
@@ -90,21 +94,21 @@ const Header = (props) => {
                 <div className="dropdown-menu animate slideIn dopdown_formatting">
                   <div
                     className="dropdownLinks p-2"
-                    onClick={() => navigate("/change-password")}
+                    onClick={() => navigate("/videoAgent/profile")}
                   >
                     <span>
                       <i className="fa fa-cog mr-3" />
-                      Change Password
+                      Profile
                     </span>
                   </div>
                   <hr />
                   <div
                     className="dropdownLinks p-2 mt-1"
-                    onClick={() => navigate("/login")}
+                    onClick={() => navigate("/videoAgent/history")}
                   >
                     <span>
                       <i className="fa fa-sign-out mr-3" />
-                      LogOut
+                      History
                     </span>
                   </div>
                 </div>
@@ -134,59 +138,59 @@ const Header = (props) => {
               </div>
               <span
                 className="logout_Pointer_cursor mt-2"
-                onClick={() => navigate("/dashboard")}
+                onClick={() => navigate("/videoAgent/profile")}
               >
-                Dashboard
+                Profile
               </span>
 
               <span
                 className="logout_Pointer_cursor mt-2"
-                onClick={() => navigate("/all-product")}
+                onClick={() => navigate("/videoAgent/history")}
               >
-                Product
+                History
               </span>
 
               <span
                 className="logout_Pointer_cursor mt-2"
-                onClick={() => navigate("/all-order")}
+                //onClick={() => navigate("/videoAgent/call")}
               >
-                Order
+                Call
               </span>
 
               <span
                 className="logout_Pointer_cursor mt-2"
-                onClick={() => navigate("/categories")}
+                onClick={() => navigate("/videoAgent/tickets")}
               >
-                Categories
+                Tickets
               </span>
 
-              <span
+              {/* <span
                 className="logout_Pointer_cursor mt-2"
                 onClick={() => navigate("/daily-request")}
               >
                 Daily Request
-              </span>
+              </span> */}
 
-              <span
+              {/* <span
                 className="logout_Pointer_cursor mt-2"
                 onClick={() => navigate("/delivery-partner")}
               >
                 Delivery Partner
-              </span>
+              </span> */}
 
-              <span
+              {/* <span
                 className="logout_Pointer_cursor mt-2"
                 onClick={() => navigate("#")}
               >
                 Change Password
-              </span>
+              </span> */}
 
-              <span
+              {/* <span
                 className="logout_Pointer_cursor mt-2"
                 onClick={() => navigate("/")}
               >
                 Log Out
-              </span>
+              </span> */}
             </div>
           </div>
         </Toolbar>

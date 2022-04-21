@@ -235,16 +235,6 @@ function ViewProfile({ videoAgents }) {
                   })}
                 </TableBody>
               </Table>
-              {/* <TablePagination
-                true
-                rowsPerPageOptions={false}
-                component="div"
-                // count={filterData?.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onChangePage={handleChangePage}
-                onChangeRowsPerPage={handleChangeRowsPerPage}
-              /> */}
             </TableContainer>
           </Card>
 
